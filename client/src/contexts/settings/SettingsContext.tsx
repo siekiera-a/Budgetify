@@ -1,3 +1,4 @@
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import React, {
   createContext,
   useCallback,
@@ -5,9 +6,8 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { AppTheme, Dictionary, Language, LanguageDictionary } from "./types";
 import pl from "./strings/pl";
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { AppTheme, Dictionary, Language, LanguageDictionary } from "./types";
 
 export interface SettingsContext {
   setLanguage(lang: Language): void;
@@ -80,21 +80,18 @@ export function SettingsContextProvider({ children }: SettingsContextProps) {
     };
 
     initialize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (initialized) {
       persistTheme(theme);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
 
   useEffect(() => {
     if (initialized) {
       persistLanguage(language);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
 
   const clearSettings = useCallback(() => {

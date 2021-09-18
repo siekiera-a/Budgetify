@@ -19,7 +19,6 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "error",
     "spaced-comment": ["error", "always", { markers: ["/"] }],
     "react/jsx-key": [1, { checkFragmentShorthand: true }],
     "react/jsx-fragments": ["error", "element"],
