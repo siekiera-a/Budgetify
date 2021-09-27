@@ -17,6 +17,7 @@ export function Stack({
   direction = "column",
   withSeparator = false,
   separatorColor,
+  style,
   ...rest
 }: Props) {
   const elements = React.Children.toArray(children);
@@ -24,9 +25,12 @@ export function Stack({
 
   return (
     <View
-      style={{
-        flexDirection: direction,
-      }}
+      style={[
+        style,
+        {
+          flexDirection: direction,
+        },
+      ]}
       {...rest}
     >
       {list.map(([child, { isLast }], index) => {
