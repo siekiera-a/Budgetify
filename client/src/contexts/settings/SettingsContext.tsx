@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { Appearance } from "react-native";
 import pl from "./strings/pl";
 import { AppTheme, Dictionary, Language, LanguageDictionary } from "./types";
 
@@ -15,17 +16,21 @@ export interface SettingsContext {
   setTheme(theme: AppTheme): void;
   dictionary: Dictionary;
   clearSettings(): void;
+  theme: AppTheme;
 }
 
 export interface SettingsContextProps {
   children?: React.ReactNode;
 }
 
+const defaultTheme = Appearance.getColorScheme() as AppTheme;
+
 const defaultValue: SettingsContext = {
   setLanguage: () => void 0,
   setTheme: () => void 0,
   dictionary: pl,
   clearSettings: () => void 0,
+  theme: defaultTheme,
 };
 
 const settingsContext = createContext<SettingsContext>(defaultValue);
@@ -35,7 +40,6 @@ const { Provider } = settingsContext;
 const THEME_PERSISTENT_KEY = "THEME_KEY";
 const LANGUAGE_PERSISTENT_KEY = "LANGUAGE_KEY";
 
-const defaultTheme: AppTheme = "dark";
 const defaultLanguage: Language = "PL";
 
 const languageDictionary: LanguageDictionary = {
@@ -58,10 +62,6 @@ export function SettingsProvider({ children }: SettingsContextProps) {
     setItem: persistLanguage,
     removeItem: removeLanguage,
   } = useAsyncStorage(LANGUAGE_PERSISTENT_KEY);
-
-  useEffect(() => {
-    setTheme("dark");
-  }, []);
 
   useEffect(() => {
     const initialize = async () => {
@@ -109,6 +109,7 @@ export function SettingsProvider({ children }: SettingsContextProps) {
         setLanguage,
         dictionary,
         clearSettings,
+        theme,
       }}
     >
       {children}
