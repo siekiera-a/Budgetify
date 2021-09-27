@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSettings } from "../../contexts";
-import { Stack } from "../ui/Stack";
+import { Stack } from "../../ui";
 import { Credentials } from "./types";
 
 export function LoginView() {

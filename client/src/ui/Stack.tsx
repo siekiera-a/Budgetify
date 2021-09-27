@@ -1,6 +1,6 @@
 import React from "react";
 import { OpaqueColorValue, View, ViewProps } from "react-native";
-import { useList } from "../../hooks/useList";
+import { useList } from "../hooks/useList";
 import { Divider } from "react-native-paper";
 
 interface Props extends ViewProps {
