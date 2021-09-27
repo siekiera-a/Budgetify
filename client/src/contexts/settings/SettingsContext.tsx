@@ -2,6 +2,7 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import React, {
   createContext,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -27,7 +28,7 @@ const defaultValue: SettingsContext = {
   clearSettings: () => void 0,
 };
 
-export const settingsContext = createContext<SettingsContext>(defaultValue);
+const settingsContext = createContext<SettingsContext>(defaultValue);
 
 const { Provider } = settingsContext;
 
@@ -41,7 +42,7 @@ const languageDictionary: LanguageDictionary = {
   PL: pl,
 };
 
-export function SettingsContextProvider({ children }: SettingsContextProps) {
+export function SettingsProvider({ children }: SettingsContextProps) {
   const [theme, setTheme] = useState(defaultTheme);
   const [language, setLanguage] = useState(defaultLanguage);
   const [initialized, setInitialized] = useState(false);
@@ -113,4 +114,8 @@ export function SettingsContextProvider({ children }: SettingsContextProps) {
       {children}
     </Provider>
   );
+}
+
+export function useSettings() {
+  return useContext(settingsContext);
 }

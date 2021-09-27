@@ -6,4 +6,10 @@ export type Dictionary = Record<StringId, string>;
 
 export type LanguageDictionary = Record<Language, Dictionary>;
 
-export type StringId = "emailLabel" | "passwordLabel" | "nameLabel";
+export type StringId =
+  | "emailLabel"
+  | "passwordLabel"
+  | "nameLabel"
+  | "signIn"
+  | "signUp"
+  | "requiredField";
