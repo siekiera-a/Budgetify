@@ -1,13 +1,12 @@
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button, Text, TextInput, useTheme } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import { useSettings } from "../../contexts";
-import { SafeAreaView, Stack } from "../../ui";
+import { ErrorMessage, SafeAreaView, Stack } from "../../ui";
 import { Credentials } from "./types";
 
 export function LoginView() {
   const { dictionary } = useSettings();
-  const { colors } = useTheme();
   const {
     handleSubmit,
     control,
@@ -48,8 +47,8 @@ export function LoginView() {
               required: { value: true, message: dictionary.requiredField },
             }}
           />
-          {errors.email && (
-            <Text style={{ color: colors.error }}>{errors.email.message}</Text>
+          {errors.email && errors.email.message && (
+            <ErrorMessage message={errors.email.message} />
           )}
         </Stack>
         <Stack space={5}>
@@ -77,10 +76,8 @@ export function LoginView() {
               required: { value: true, message: dictionary.requiredField },
             }}
           />
-          {errors.password && (
-            <Text style={{ color: colors.error }}>
-              {errors.password.message}
-            </Text>
+          {errors.password && errors.password.message && (
+            <ErrorMessage message={errors.password.message} />
           )}
         </Stack>
         <Button mode="contained" onPress={handleSubmit(onSubmit)}>

@@ -6,3 +6,7 @@ export interface Credentials {
 export interface RegistrationCredentials extends Credentials {
   name: string;
 }
+
+export interface RegistrationForm extends RegistrationCredentials {
+  retypedPassword: string;
+}

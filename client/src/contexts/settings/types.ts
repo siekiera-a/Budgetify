@@ -12,4 +12,9 @@ export type StringId =
   | "nameLabel"
   | "signIn"
   | "signUp"
-  | "requiredField";
+  | "requiredField"
+  | "retypedPasswordLabel"
+  | "invalidUsername"
+  | "invalidEmail"
+  | "passwordTooWeak"
+  | "passwordsNotEquals";
