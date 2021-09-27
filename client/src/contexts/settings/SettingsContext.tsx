@@ -8,15 +8,23 @@ import React, {
   useState,
 } from "react";
 import { Appearance } from "react-native";
+import { darkTheme } from "./themes/darkTheme";
+import { lightTheme } from "./themes/lightTheme";
 import pl from "./strings/pl";
-import { AppTheme, Dictionary, Language, LanguageDictionary } from "./types";
+import {
+  AppTheme,
+  Dictionary,
+  Language,
+  LanguageDictionary,
+  Theme,
+} from "./types";
 
 export interface SettingsContext {
   setLanguage(lang: Language): void;
   setTheme(theme: AppTheme): void;
   dictionary: Dictionary;
   clearSettings(): void;
-  theme: AppTheme;
+  theme: Theme;
 }
 
 export interface SettingsContextProps {
@@ -30,7 +38,7 @@ const defaultValue: SettingsContext = {
   setTheme: () => void 0,
   dictionary: pl,
   clearSettings: () => void 0,
-  theme: defaultTheme,
+  theme: defaultTheme === "dark" ? darkTheme : lightTheme,
 };
 
 const settingsContext = createContext<SettingsContext>(defaultValue);
@@ -109,7 +117,7 @@ export function SettingsProvider({ children }: SettingsContextProps) {
         setLanguage,
         dictionary,
         clearSettings,
-        theme,
+        theme: theme === "dark" ? darkTheme : lightTheme,
       }}
     >
       {children}
