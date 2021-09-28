@@ -14,6 +14,10 @@ const strings: Dictionary = {
   passwordTooWeak:
     "Hasło powinno zawierać co najmniej 1 wielką i małą literę, znak specjalny oraz cyfrę",
   passwordsNotEquals: "Hasła nie są identyczne",
+  analysis: "Analiza",
+  payments: "Płatności",
+  groups: "Grupy",
+  settings: "Ustawienia",
 };
 
 export default strings;

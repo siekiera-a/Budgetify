@@ -24,4 +24,8 @@ export type StringId =
   | "invalidUsername"
   | "invalidEmail"
   | "passwordTooWeak"
-  | "passwordsNotEquals";
+  | "passwordsNotEquals"
+  | "analysis"
+  | "payments"
+  | "groups"
+  | "settings";

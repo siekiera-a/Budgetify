@@ -18,7 +18,7 @@ const Component = () => {
 };
 
 export function Navigation() {
-  const { theme } = useSettings();
+  const { theme, dictionary } = useSettings();
 
   return (
     <NavigationContainer theme={theme}>
@@ -33,6 +33,7 @@ export function Navigation() {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="pie-chart" color={color} size={size} />
             ),
+            title: dictionary.analysis,
           }}
         />
         <Tab.Screen
@@ -42,6 +43,7 @@ export function Navigation() {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="wallet" color={color} size={size} />
             ),
+            title: dictionary.payments,
           }}
         />
         <Tab.Screen
@@ -51,6 +53,7 @@ export function Navigation() {
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="people" color={color} size={size} />
             ),
+            title: dictionary.groups,
           }}
         />
         <Tab.Screen
@@ -58,8 +61,9 @@ export function Navigation() {
           component={Component}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="md-person-circle" color={color} size={size} />
+              <Ionicons name="settings" color={color} size={size} />
             ),
+            title: dictionary.settings,
           }}
         />
       </Tab.Navigator>
