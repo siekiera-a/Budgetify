@@ -63,4 +63,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     Set<Payment> payments = new HashSet<>();
+
+    public User(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+    }
+
 }
