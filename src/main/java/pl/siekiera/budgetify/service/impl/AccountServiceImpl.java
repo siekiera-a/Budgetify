@@ -10,6 +10,8 @@ import pl.siekiera.budgetify.entity.User;
 import pl.siekiera.budgetify.repository.UserRepository;
 import pl.siekiera.budgetify.service.AccountService;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -34,6 +36,17 @@ public class AccountServiceImpl implements AccountService {
     public void changeBankAccount(User user, String bankAccount) {
         user.setBankAccount(bankAccount);
         userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findUser(String email, String password) {
+        Optional<User> userWrapper = userRepository.findUserByEmail(email);
+        if (userWrapper.isEmpty()) {
+            return userWrapper;
+        }
+        User user = userWrapper.get();
+        boolean passwordsMatches = passwordEncoder.matches(password, user.getPassword());
+        return passwordsMatches ? Optional.of(user) : Optional.empty();
     }
 
 }

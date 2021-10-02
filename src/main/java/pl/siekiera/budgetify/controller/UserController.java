@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import pl.siekiera.budgetify.dto.incoming.LoginRequestBody;
 import pl.siekiera.budgetify.dto.incoming.RegisterRequestBody;
 import pl.siekiera.budgetify.dto.outgoing.LoginResponse;
 import pl.siekiera.budgetify.exception.UserAlreadyExistsException;
@@ -33,6 +34,15 @@ public class UserController {
         } catch (UserAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> signIn(@Valid @RequestBody LoginRequestBody request) {
+        LoginResponse body = authenticationService.signIn(request);
+        if (body == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
 }
