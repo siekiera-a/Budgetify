@@ -2,7 +2,7 @@ import { ErrorResponse, mapToErrorResponse } from "./error";
 import { Data, IError } from "./types";
 
 export class HttpClient {
-  private static readonly apiUrl = "http://localhost:8080";
+  private static readonly apiUrl = "http://192.168.0.101:8080";
 
   constructor(private token: string) {}
 

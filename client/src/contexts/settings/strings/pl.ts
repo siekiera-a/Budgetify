@@ -18,6 +18,8 @@ const strings: Dictionary = {
   payments: "Płatności",
   groups: "Grupy",
   settings: "Ustawienia",
+  invalidCredentials: "Nieprawidłowe dane logowania",
+  unknownError: "Ups... Coś poszło nie tak",
 };
 
 export default strings;

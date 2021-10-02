@@ -1,12 +1,16 @@
-import React from "react";
+import { StatusCodes } from "http-status-codes";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { Keyboard } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { useSettings } from "../../contexts";
+import { useHttp, useSettings } from "../../contexts";
+import { ErrorResponse, signIn } from "../../libs";
 import { ErrorMessage, SafeAreaView, Stack } from "../../ui";
 import { Credentials } from "./types";
 
 export function LoginView() {
   const { dictionary } = useSettings();
+  const { client, setToken } = useHttp();
   const {
     handleSubmit,
     control,
@@ -15,9 +19,33 @@ export function LoginView() {
     mode: "onBlur",
     reValidateMode: "onBlur",
   });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string>();
+
+  const handleRequest = async (data: Credentials) => {
+    try {
+      const response = await signIn(client, data);
+      setToken(response.token);
+    } catch (e) {
+      const invalidCredentials =
+        e instanceof ErrorResponse &&
+        (e.error.status === StatusCodes.UNAUTHORIZED ||
+          e.error.status === StatusCodes.BAD_REQUEST);
+
+      setMessage(
+        invalidCredentials
+          ? dictionary.invalidCredentials
+          : dictionary.unknownError
+      );
+      setLoading(false);
+    }
+  };
 
   const onSubmit = (data: Credentials) => {
-    console.log(data);
+    Keyboard.dismiss();
+    setLoading(true);
+    setMessage(undefined);
+    handleRequest(data);
   };
 
   return (
@@ -80,9 +108,15 @@ export function LoginView() {
             <ErrorMessage message={errors.password.message} />
           )}
         </Stack>
-        <Button mode="contained" onPress={handleSubmit(onSubmit)}>
+        <Button
+          mode="contained"
+          onPress={handleSubmit(onSubmit)}
+          loading={loading}
+          disabled={loading}
+        >
           {dictionary.signIn}
         </Button>
+        {message && <ErrorMessage message={message} />}
       </Stack>
     </SafeAreaView>
   );

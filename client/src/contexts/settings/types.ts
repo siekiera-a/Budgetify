@@ -28,4 +28,6 @@ export type StringId =
   | "analysis"
   | "payments"
   | "groups"
-  | "settings";
+  | "settings"
+  | "invalidCredentials"
+  | "unknownError";
