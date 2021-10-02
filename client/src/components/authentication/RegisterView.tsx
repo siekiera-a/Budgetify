@@ -3,7 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button, TextInput } from "react-native-paper";
 import { useSettings } from "../../contexts";
 import { ErrorMessage, SafeAreaView, Stack } from "../../ui";
-import { emailRegex, passwordRegex } from "./regexps";
+import { emailRegex, nameRegex, passwordRegex } from "./regexps";
 import { RegistrationForm } from "./types";
 
 export function RegisterView() {
@@ -56,7 +56,10 @@ export function RegisterView() {
             control={control}
             rules={{
               required: { value: true, message: dictionary.requiredField },
-              minLength: { value: 3, message: dictionary.invalidUsername },
+              pattern: {
+                value: nameRegex,
+                message: dictionary.invalidUsername,
+              },
             }}
           />
           {errors.name && errors.name.message && (
