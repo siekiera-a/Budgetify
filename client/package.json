@@ -15,6 +15,7 @@
     "@types/react-native-vector-icons": "^6.4.9",
     "expo": "~42.0.1",
     "expo-status-bar": "~1.0.4",
+    "http-status-codes": "^2.1.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^7.15.0",
