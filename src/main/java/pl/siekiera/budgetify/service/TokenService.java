@@ -2,8 +2,8 @@ package pl.siekiera.budgetify.service;
 
 import pl.siekiera.budgetify.entity.Token;
 
-public interface AuthorizationService {
+public interface TokenService {
 
-    Token createToken();
+    Token createUniqueToken();
 
 }

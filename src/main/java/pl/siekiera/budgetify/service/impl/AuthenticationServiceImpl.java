@@ -11,11 +11,10 @@ import pl.siekiera.budgetify.entity.Token;
 import pl.siekiera.budgetify.entity.User;
 import pl.siekiera.budgetify.exception.UserAlreadyExistsException;
 import pl.siekiera.budgetify.model.ProfileInfo;
-import pl.siekiera.budgetify.repository.TokenRepository;
 import pl.siekiera.budgetify.repository.UserRepository;
 import pl.siekiera.budgetify.service.AccountService;
 import pl.siekiera.budgetify.service.AuthenticationService;
-import pl.siekiera.budgetify.service.AuthorizationService;
+import pl.siekiera.budgetify.service.TokenService;
 
 import java.util.Optional;
 
@@ -25,14 +24,13 @@ import java.util.Optional;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     AccountService accountService;
-    AuthorizationService authorizationService;
-    TokenRepository tokenRepository;
+    TokenService tokenService;
     UserRepository userRepository;
 
     @Override
     public LoginResponse register(RegisterRequestBody details) throws UserAlreadyExistsException {
         User user = accountService.create(details);
-        Token token = createToken();
+        Token token = tokenService.createUniqueToken();
         user.getTokens().add(token);
         try {
             userRepository.save(user);
@@ -53,23 +51,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         User user = userWrapper.get();
-        Token token = createToken();
+        Token token = tokenService.createUniqueToken();
         user.getTokens().add(token);
         userRepository.save(user);
         return new LoginResponse(token.getValue(), new ProfileInfo(user));
     }
 
-    private Token createToken() {
-        Token token = null;
-        do {
-            Token userToken = authorizationService.createToken();
-
-            try {
-                tokenRepository.save(userToken);
-                token = userToken;
-            } catch (Exception e) {
-            }
-        } while (token == null);
-        return token;
-    }
 }
