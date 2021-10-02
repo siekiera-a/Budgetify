@@ -12,6 +12,7 @@ import pl.siekiera.budgetify.service.TokenService;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -57,5 +58,13 @@ public class TokenServiceImpl implements TokenService {
             }
         } while (token == null);
         return token;
+    }
+
+    @Override
+    public Optional<Token> findToken(String value) {
+        if (value == null) {
+            return Optional.empty();
+        }
+        return tokenRepository.findById(value);
     }
 }
