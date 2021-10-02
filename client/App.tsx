@@ -2,7 +2,11 @@ import * as React from "react";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Navigation } from "./src/components/navigation/Navigation";
-import { SettingsProvider, useSettings } from "./src/contexts";
+import {
+  HttpContextProvider,
+  SettingsProvider,
+  useSettings,
+} from "./src/contexts";
 
 const AppComponent = () => {
   const { theme } = useSettings();
@@ -19,7 +23,9 @@ const AppComponent = () => {
 export default function App() {
   return (
     <SettingsProvider>
-      <AppComponent />
+      <HttpContextProvider>
+        <AppComponent />
+      </HttpContextProvider>
     </SettingsProvider>
   );
 }
