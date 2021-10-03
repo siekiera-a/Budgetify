@@ -4,3 +4,8 @@ export type TabNavigationParamList = {
   Groups: undefined;
   Settings: undefined;
 };
+
+export type StackNavigationParamList = {
+  SignIn: undefined;
+  SignUp: undefined;
+};
