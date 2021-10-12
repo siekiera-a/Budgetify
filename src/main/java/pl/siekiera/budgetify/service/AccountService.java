@@ -1,5 +1,6 @@
 package pl.siekiera.budgetify.service;
 
+import org.springframework.data.domain.Page;
 import pl.siekiera.budgetify.dto.incoming.RegisterRequestBody;
 import pl.siekiera.budgetify.entity.User;
 
@@ -14,5 +15,7 @@ public interface AccountService {
     void changeBankAccount(User user, String bankAccount);
 
     Optional<User> findUser(String email, String password);
+
+    Page<User> findUsers(String searchTerm, int page, User me);
 
 }

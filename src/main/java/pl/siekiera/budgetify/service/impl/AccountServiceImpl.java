@@ -3,6 +3,9 @@ package pl.siekiera.budgetify.service.impl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.siekiera.budgetify.dto.incoming.RegisterRequestBody;
@@ -47,6 +50,12 @@ public class AccountServiceImpl implements AccountService {
         User user = userWrapper.get();
         boolean passwordsMatches = passwordEncoder.matches(password, user.getPassword());
         return passwordsMatches ? Optional.of(user) : Optional.empty();
+    }
+
+    @Override
+    public Page<User> findUsers(String searchTerm, int page, User me) {
+        Pageable pageable = PageRequest.of(page, 15);
+        return userRepository.findUsersByEmailOrName(searchTerm, me.getId(), pageable);
     }
 
 }

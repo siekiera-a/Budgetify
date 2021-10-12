@@ -70,4 +70,13 @@ public class User {
         this.name = name;
     }
 
+    public User(String email, String password, String name, String blikNumber, String bankAccount
+        , String avatar) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.blikNumber = blikNumber;
+        this.bankAccount = bankAccount;
+        this.avatar = avatar;
+    }
 }
