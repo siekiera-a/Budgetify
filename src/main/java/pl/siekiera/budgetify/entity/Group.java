@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,8 +24,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
-@Table(name="p_group")
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "p_group")
 public class Group {
 
     @Id
@@ -43,7 +44,7 @@ public class Group {
 
     String avatar;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = {CascadeType.PERSIST})
     Set<GroupMember> users = new HashSet<>();
 
     @OneToMany(mappedBy = "group")
