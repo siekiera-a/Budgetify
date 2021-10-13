@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.siekiera.budgetify.entity.Token;
+import pl.siekiera.budgetify.entity.TokenEntity;
 import pl.siekiera.budgetify.repository.TokenRepository;
 import pl.siekiera.budgetify.service.TokenService;
 
@@ -30,11 +30,11 @@ public class TokenServiceImpl implements TokenService {
 
     final TokenRepository tokenRepository;
 
-    private Token createToken() {
+    private TokenEntity createToken() {
         String token = createRandomString();
         LocalDateTime expiration = LocalDateTime.now().plus(tokenValidityInHours,
             ChronoUnit.HOURS);
-        return new Token(token, expiration);
+        return new TokenEntity(token, expiration);
     }
 
     private String createRandomString() {
@@ -46,10 +46,10 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public Token createUniqueToken() {
-        Token token = null;
+    public TokenEntity createUniqueToken() {
+        TokenEntity token = null;
         do {
-            Token userToken = createToken();
+            TokenEntity userToken = createToken();
 
             try {
                 tokenRepository.save(userToken);
@@ -61,7 +61,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public Optional<Token> findToken(String value) {
+    public Optional<TokenEntity> findToken(String value) {
         if (value == null) {
             return Optional.empty();
         }

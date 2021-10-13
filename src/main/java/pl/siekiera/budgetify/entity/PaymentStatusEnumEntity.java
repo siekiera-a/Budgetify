@@ -1,4 +1,4 @@
 package pl.siekiera.budgetify.entity;
 
-public enum PaymentStatusEnum {
+public enum PaymentStatusEnumEntity {
 }

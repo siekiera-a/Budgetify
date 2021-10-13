@@ -1,13 +1,13 @@
 package pl.siekiera.budgetify.service;
 
-import pl.siekiera.budgetify.entity.Token;
+import pl.siekiera.budgetify.entity.TokenEntity;
 
 import java.util.Optional;
 
 public interface TokenService {
 
-    Token createUniqueToken();
+    TokenEntity createUniqueToken();
 
-    Optional<Token> findToken(String value);
+    Optional<TokenEntity> findToken(String value);
 
 }

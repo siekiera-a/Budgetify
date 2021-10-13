@@ -2,20 +2,20 @@ package pl.siekiera.budgetify.service;
 
 import org.springframework.data.domain.Page;
 import pl.siekiera.budgetify.dto.incoming.RegisterRequestBody;
-import pl.siekiera.budgetify.entity.User;
+import pl.siekiera.budgetify.entity.UserEntity;
 
 import java.util.Optional;
 
 public interface AccountService {
 
-    User create(RegisterRequestBody details);
+    UserEntity create(RegisterRequestBody details);
 
-    void changeBlikNumber(User user, String number);
+    void changeBlikNumber(UserEntity user, String number);
 
-    void changeBankAccount(User user, String bankAccount);
+    void changeBankAccount(UserEntity user, String bankAccount);
 
-    Optional<User> findUser(String email, String password);
+    Optional<UserEntity> findUser(String email, String password);
 
-    Page<User> findUsers(String searchTerm, int page, User me);
+    Page<UserEntity> findUsers(String searchTerm, int page, UserEntity me);
 
 }

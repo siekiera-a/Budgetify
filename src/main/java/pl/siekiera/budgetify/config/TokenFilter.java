@@ -9,8 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pl.siekiera.budgetify.entity.Token;
-import pl.siekiera.budgetify.entity.User;
+import pl.siekiera.budgetify.entity.TokenEntity;
+import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.service.TokenService;
 
 import javax.servlet.FilterChain;
@@ -37,7 +37,7 @@ public class TokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader(tokenHeader);
-        Optional<Token> tokenWrapper = tokenService.findToken(token);
+        Optional<TokenEntity> tokenWrapper = tokenService.findToken(token);
         tokenWrapper.ifPresentOrElse(t -> {
             LocalDateTime now = LocalDateTime.now();
 
@@ -46,14 +46,14 @@ public class TokenFilter extends OncePerRequestFilter {
                 return;
             }
 
-            User user = t.getUser();
+            UserEntity user = t.getUser();
             SecurityContextHolder.getContext().setAuthentication(getAuthentication(user));
         }, SecurityContextHolder::clearContext);
 
         filterChain.doFilter(request, response);
     }
 
-    private Authentication getAuthentication(User user) {
+    private Authentication getAuthentication(UserEntity user) {
         return new UsernamePasswordAuthenticationToken(user, "", Collections.emptyList());
     }
 }

@@ -25,7 +25,7 @@ import java.util.Set;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "p_user")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,33 +50,24 @@ public class User {
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "user_id")
-    Set<Token> tokens = new HashSet<>();
+    Set<TokenEntity> tokens = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    Set<GroupMember> groups = new HashSet<>();
+    Set<GroupMemberEntity> groups = new HashSet<>();
 
     @OneToMany(mappedBy = "owner")
-    Set<Group> ownedGroups = new HashSet<>();
+    Set<GroupEntity> ownedGroups = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    Set<Invoice> invoices = new HashSet<>();
+    Set<InvoiceEntity> invoices = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    Set<Payment> payments = new HashSet<>();
+    Set<PaymentEntity> payments = new HashSet<>();
 
-    public User(String email, String password, String name) {
+    public UserEntity(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;
     }
 
-    public User(String email, String password, String name, String blikNumber, String bankAccount
-        , String avatar) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.blikNumber = blikNumber;
-        this.bankAccount = bankAccount;
-        this.avatar = avatar;
-    }
 }

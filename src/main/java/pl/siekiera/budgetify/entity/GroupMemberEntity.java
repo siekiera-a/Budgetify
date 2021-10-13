@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-import pl.siekiera.budgetify.entity.pk.GroupMemberId;
+import pl.siekiera.budgetify.entity.pk.GroupMemberIdEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,16 +21,17 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
-@IdClass(GroupMemberId.class)
-public class GroupMember {
+@IdClass(GroupMemberIdEntity.class)
+@Table(name = "group_member")
+public class GroupMemberEntity {
 
     @Id
     @ManyToOne
-    User user;
+    UserEntity user;
 
     @Id
     @ManyToOne
-    Group group;
+    GroupEntity group;
 
     @CreationTimestamp
     @Column(nullable = false)

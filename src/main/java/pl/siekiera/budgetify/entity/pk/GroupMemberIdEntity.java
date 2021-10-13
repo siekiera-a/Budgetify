@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class GroupMemberId implements Serializable {
+public class GroupMemberIdEntity implements Serializable {
 
     long user;
     long group;

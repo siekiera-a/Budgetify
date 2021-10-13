@@ -7,24 +7,36 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PaymentStatus {
+@Table(name = "payment")
+public class PaymentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    @Enumerated(EnumType.STRING)
-    PaymentStatusEnum name;
+    @ManyToOne
+    InvoiceEntity invoice;
+
+    @ManyToOne
+    UserEntity user;
+
+    double price;
+
+    @OneToMany(mappedBy = "payment", orphanRemoval = true)
+    Set<PaymentHistoryEntity> paymentHistory = new HashSet<>();
 
 }

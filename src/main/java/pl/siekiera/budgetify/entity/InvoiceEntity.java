@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,8 +25,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
-public class Invoice {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "invoice")
+public class InvoiceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,18 +38,18 @@ public class Invoice {
     LocalDateTime addTime;
 
     @ManyToOne(optional = false)
-    User user;
+    UserEntity user;
 
     @ManyToOne(optional = false)
-    Group group;
+    GroupEntity group;
 
     @OneToMany(mappedBy = "invoice")
-    List<InvoiceItem> items = new ArrayList<>();
+    List<InvoiceItemEntity> items = new ArrayList<>();
 
     @OneToMany(mappedBy = "invoice", orphanRemoval = true)
-    Set<Photo> photos = new HashSet<>();
+    Set<PhotoEntity> photos = new HashSet<>();
 
     @OneToMany(mappedBy = "invoice")
-    Set<Payment> payments = new HashSet<>();
+    Set<PaymentEntity> payments = new HashSet<>();
 
 }

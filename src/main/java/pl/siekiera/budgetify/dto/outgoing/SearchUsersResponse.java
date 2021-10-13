@@ -2,7 +2,7 @@ package pl.siekiera.budgetify.dto.outgoing;
 
 import lombok.Value;
 import org.springframework.data.domain.Page;
-import pl.siekiera.budgetify.entity.User;
+import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.model.UserInfo;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class SearchUsersResponse {
     int currentPage;
     long totalCount;
 
-    public SearchUsersResponse(Page<User> users, String searchTerm) {
+    public SearchUsersResponse(Page<UserEntity> users, String searchTerm) {
         this.searchTerm = searchTerm;
         this.users = users.map(UserInfo::new).getContent();
         totalPages = users.getTotalPages();

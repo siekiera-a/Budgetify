@@ -26,7 +26,7 @@ import java.util.Set;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "p_group")
-public class Group {
+public class GroupEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,14 +40,14 @@ public class Group {
     LocalDateTime creationTime;
 
     @ManyToOne(optional = false)
-    User owner;
+    UserEntity owner;
 
     String avatar;
 
     @OneToMany(mappedBy = "group", cascade = {CascadeType.PERSIST})
-    Set<GroupMember> users = new HashSet<>();
+    Set<GroupMemberEntity> users = new HashSet<>();
 
     @OneToMany(mappedBy = "group")
-    Set<Invoice> invoices = new HashSet<>();
+    Set<InvoiceEntity> invoices = new HashSet<>();
 
 }

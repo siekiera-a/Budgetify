@@ -1,7 +1,7 @@
 package pl.siekiera.budgetify.model;
 
 import lombok.Value;
-import pl.siekiera.budgetify.entity.User;
+import pl.siekiera.budgetify.entity.UserEntity;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +22,7 @@ public class ProfileInfo {
 
     String avatar;
 
-    public ProfileInfo(User user) {
+    public ProfileInfo(UserEntity user) {
         id = user.getId();
         name = user.getName();
         email = user.getEmail();

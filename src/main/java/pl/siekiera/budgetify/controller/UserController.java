@@ -19,7 +19,7 @@ import pl.siekiera.budgetify.dto.incoming.LoginRequestBody;
 import pl.siekiera.budgetify.dto.incoming.RegisterRequestBody;
 import pl.siekiera.budgetify.dto.outgoing.LoginResponse;
 import pl.siekiera.budgetify.dto.outgoing.SearchUsersResponse;
-import pl.siekiera.budgetify.entity.User;
+import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.exception.UserAlreadyExistsException;
 import pl.siekiera.budgetify.service.AccountService;
 import pl.siekiera.budgetify.service.AuthenticationService;
@@ -60,8 +60,8 @@ public class UserController {
                                                          @RequestParam(name = "page", required =
                                                              false, defaultValue = "0") int page,
                                                          Authentication auth) {
-        User me = (User) auth.getPrincipal();
-        Page<User> users = accountService.findUsers(searchTerm, page, me);
+        UserEntity me = (UserEntity) auth.getPrincipal();
+        Page<UserEntity> users = accountService.findUsers(searchTerm, page, me);
         return new ResponseEntity<>(new SearchUsersResponse(users, searchTerm), HttpStatus.OK);
     }
 

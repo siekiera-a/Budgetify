@@ -1,8 +1,7 @@
 package pl.siekiera.budgetify.dto.outgoing;
 
-import lombok.Builder;
 import lombok.Value;
-import pl.siekiera.budgetify.entity.Group;
+import pl.siekiera.budgetify.entity.GroupEntity;
 import pl.siekiera.budgetify.model.UserInfo;
 
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ public class GroupResponse {
     UserInfo owner;
     List<UserInfo> members;
 
-    public GroupResponse(Group group) {
+    public GroupResponse(GroupEntity group) {
         name = group.getName();
         avatar = group.getAvatar();
         creationTime = group.getCreationTime();

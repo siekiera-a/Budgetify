@@ -1,7 +1,7 @@
 package pl.siekiera.budgetify.model;
 
 import lombok.Value;
-import pl.siekiera.budgetify.entity.User;
+import pl.siekiera.budgetify.entity.UserEntity;
 
 @Value
 public class UserInfo {
@@ -12,7 +12,7 @@ public class UserInfo {
 
     String avatar;
 
-    public UserInfo(User user) {
+    public UserInfo(UserEntity user) {
         id = user.getId();
         name = user.getName();
         avatar = user.getAvatar();

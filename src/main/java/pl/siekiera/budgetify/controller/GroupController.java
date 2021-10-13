@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.siekiera.budgetify.dto.incoming.CreateGroupRequest;
 import pl.siekiera.budgetify.dto.outgoing.GroupResponse;
-import pl.siekiera.budgetify.entity.Group;
-import pl.siekiera.budgetify.entity.User;
+import pl.siekiera.budgetify.entity.GroupEntity;
+import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.service.GroupService;
 
 import javax.validation.Valid;
@@ -31,8 +31,8 @@ public class GroupController {
     @PostMapping
     public ResponseEntity<GroupResponse> create(@RequestBody @Valid CreateGroupRequest request,
                                                 Authentication authentication) {
-        User me = (User) authentication.getPrincipal();
-        Group group = groupService.create(request, me);
+        UserEntity me = (UserEntity) authentication.getPrincipal();
+        GroupEntity group = groupService.create(request, me);
         return new ResponseEntity<>(new GroupResponse(group), HttpStatus.CREATED);
     }
 
