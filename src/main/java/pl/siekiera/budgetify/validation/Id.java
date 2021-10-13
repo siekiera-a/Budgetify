@@ -1,6 +1,6 @@
 package pl.siekiera.budgetify.validation;
 
-import pl.siekiera.budgetify.validation.validators.PasswordConstraintValidator;
+import pl.siekiera.budgetify.validation.validators.IdConstraintValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,12 +9,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = PasswordConstraintValidator.class)
+@Constraint(validatedBy = IdConstraintValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Password {
+public @interface Id {
 
-    String message() default "Invalid Password";
+    String message() default "Invalid Id";
 
     Class<?>[] groups() default {};
 

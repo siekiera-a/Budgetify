@@ -1,4 +1,4 @@
-package pl.siekiera.budgetify.validation;
+package pl.siekiera.budgetify.validation.validators;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -9,6 +9,7 @@ import org.passay.PasswordData;
 import org.passay.PasswordValidator;
 import org.passay.RuleResult;
 import org.passay.WhitespaceRule;
+import pl.siekiera.budgetify.validation.Password;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
