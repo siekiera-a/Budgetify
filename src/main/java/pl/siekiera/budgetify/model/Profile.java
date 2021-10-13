@@ -6,7 +6,7 @@ import pl.siekiera.budgetify.entity.UserEntity;
 import java.time.LocalDateTime;
 
 @Value
-public class ProfileInfo {
+public class Profile {
 
     long id;
 
@@ -22,7 +22,7 @@ public class ProfileInfo {
 
     String avatar;
 
-    public ProfileInfo(UserEntity user) {
+    public Profile(UserEntity user) {
         id = user.getId();
         name = user.getName();
         email = user.getEmail();

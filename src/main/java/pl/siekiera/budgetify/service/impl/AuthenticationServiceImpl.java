@@ -10,7 +10,7 @@ import pl.siekiera.budgetify.dto.outgoing.LoginResponse;
 import pl.siekiera.budgetify.entity.TokenEntity;
 import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.exception.UserAlreadyExistsException;
-import pl.siekiera.budgetify.model.ProfileInfo;
+import pl.siekiera.budgetify.model.Profile;
 import pl.siekiera.budgetify.repository.UserRepository;
 import pl.siekiera.budgetify.service.AccountService;
 import pl.siekiera.budgetify.service.AuthenticationService;
@@ -38,7 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new UserAlreadyExistsException(String.format("User with email: %s already " +
                 "exists!", user.getEmail()), e);
         }
-        return new LoginResponse(token.getValue(), new ProfileInfo(user));
+        return new LoginResponse(token.getValue(), new Profile(user));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         TokenEntity token = tokenService.createUniqueToken();
         user.getTokens().add(token);
         userRepository.save(user);
-        return new LoginResponse(token.getValue(), new ProfileInfo(user));
+        return new LoginResponse(token.getValue(), new Profile(user));
     }
 
 }

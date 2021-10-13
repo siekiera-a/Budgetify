@@ -4,7 +4,7 @@ import lombok.Value;
 import pl.siekiera.budgetify.entity.UserEntity;
 
 @Value
-public class UserInfo {
+public class User {
 
     long id;
 
@@ -12,7 +12,7 @@ public class UserInfo {
 
     String avatar;
 
-    public UserInfo(UserEntity user) {
+    public User(UserEntity user) {
         id = user.getId();
         name = user.getName();
         avatar = user.getAvatar();
