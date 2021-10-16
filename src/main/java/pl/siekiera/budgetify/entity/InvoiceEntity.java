@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +44,7 @@ public class InvoiceEntity {
     @ManyToOne(optional = false)
     GroupEntity group;
 
-    @OneToMany(mappedBy = "invoice")
+    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
     List<InvoiceItemEntity> items = new ArrayList<>();
 
     @OneToMany(mappedBy = "invoice", orphanRemoval = true)

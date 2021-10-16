@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @Value
 public class GroupResponse {
 
+    long id;
     String name;
     String avatar;
     LocalDateTime creationTime;
@@ -18,6 +19,7 @@ public class GroupResponse {
     List<User> members;
 
     public GroupResponse(GroupEntity group) {
+        id = group.getId();
         name = group.getName();
         avatar = group.getAvatar();
         creationTime = group.getCreationTime();

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import pl.siekiera.budgetify.model.InvoiceItem;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,5 +34,10 @@ public class InvoiceItemEntity {
     String name;
 
     double price;
+
+    public InvoiceItemEntity(InvoiceItem item) {
+        name = item.getText();
+        price = item.getPrice();
+    }
 
 }
