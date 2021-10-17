@@ -5,7 +5,12 @@ export type TabNavigationParamList = {
   Settings: undefined;
 };
 
-export type StackNavigationParamList = {
+export type StackAuthenticationNavigationParamList = {
   SignIn: undefined;
   SignUp: undefined;
+};
+
+export type StackNavigationParamList = {
+  App: undefined;
+  CreateGroup: undefined;
 };

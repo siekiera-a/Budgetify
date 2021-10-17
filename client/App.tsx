@@ -1,5 +1,5 @@
-import 'react-native-gesture-handler';
 import * as React from "react";
+import "react-native-gesture-handler";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Navigation } from "./src/components/navigation/Navigation";
