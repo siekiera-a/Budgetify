@@ -47,16 +47,10 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public TokenEntity createUniqueToken() {
-        TokenEntity token = null;
-        do {
-            TokenEntity userToken = createToken();
-
-            try {
-                tokenRepository.save(userToken);
-                token = userToken;
-            } catch (Exception e) {
-            }
-        } while (token == null);
+        TokenEntity token = createToken();
+        while (tokenRepository.existsById(token.getId())) {
+            token = createToken();
+        }
         return token;
     }
 
