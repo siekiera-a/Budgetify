@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Persistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "token")
-public class TokenEntity implements Persistable<String> {
+public class TokenEntity {
 
     @Id
     String value;
@@ -36,13 +35,4 @@ public class TokenEntity implements Persistable<String> {
         this.expirationTime = expirationTime;
     }
 
-    @Override
-    public String getId() {
-        return value;
-    }
-
-    @Override
-    public boolean isNew() {
-        return true;
-    }
 }
