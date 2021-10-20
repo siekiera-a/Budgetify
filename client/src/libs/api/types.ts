@@ -9,15 +9,26 @@ export type RegisterRequest = LoginRequest & {
 
 export type LoginResponse = {
   token: string;
-  user: ProfileInfo;
+  user: Profile;
 };
 
-export type ProfileInfo = {
+export type SearchUsersResponse = {
+  users: User[];
+  searchTerm: string;
+  totalPages: number;
+  currentPage: number;
+  totalCount: number;
+};
+
+export type User = {
   id: number;
   name: string;
+  avatar: string | null;
+};
+
+export type Profile = User & {
   email: string;
   registrationTime: string;
   blikNumber: string;
   bankAccount: string;
-  avatar: string;
 };
