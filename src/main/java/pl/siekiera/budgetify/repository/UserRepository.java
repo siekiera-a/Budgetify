@@ -13,9 +13,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findUserByEmail(String email);
 
-    @Query("select u from UserEntity u where u.id <> :id and (u.name like concat(:term, '%') or u.email" +
-        " like concat(:term, '%'))")
-    Page<UserEntity> findUsersByEmailOrName(@Param("term") String searchTerm, @Param("id") long myId,
+    @Query("select u from UserEntity u where u.id <> :id and (lower(u.name) like lower(concat" +
+        "(:term, '%')) or lower(u.email) like lower(concat(:term, '%')))")
+    Page<UserEntity> findUsersByEmailOrName(@Param("term") String searchTerm,
+                                            @Param("id") long myId,
                                             Pageable pageable);
 
 }
