@@ -1,6 +1,7 @@
 import { createModel } from "xstate/lib/model";
 import {
   ErrorResponse,
+  GroupResponse,
   HttpClient,
   SearchUsersResponse,
   User,
@@ -45,6 +46,9 @@ export const groupModel = createModel(
       EXIT: () => ({}),
       USER_SELECTED: (user: User) => ({ user }),
       DELETE_USER: (user: User) => ({ user }),
+      CREATE: () => ({}),
+      ERROR: (error: ErrorResponse) => ({ error }),
+      GROUP_CREATED: (data: GroupResponse) => ({ data }),
     },
   }
 );

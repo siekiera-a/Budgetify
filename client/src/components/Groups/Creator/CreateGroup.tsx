@@ -48,6 +48,10 @@ export function CreateGroup({ navigation, service }: Props) {
     send({ type: "DELETE_USER", user });
   };
 
+  const createGroup = useCallback(() => {
+    send("CREATE");
+  }, [send]);
+
   return (
     <View style={styles.view}>
       <Surface style={styles.surface}>
@@ -106,7 +110,7 @@ export function CreateGroup({ navigation, service }: Props) {
           />
         </Surface>
       </View>
-      <Button mode="contained">{dictionary.create}</Button>
+      <Button mode="contained" onPress={createGroup}>{dictionary.create}</Button>
     </View>
   );
 }
