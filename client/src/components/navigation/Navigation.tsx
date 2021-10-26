@@ -4,7 +4,7 @@ import React from "react";
 import { useHttp, useSettings } from "../../contexts";
 import { LoginView } from "../authentication/LoginView";
 import { RegisterView } from "../authentication/RegisterView";
-import { GroupCreator } from "../Groups/GroupCreator";
+import { GroupCreator } from "../Groups/Creator/GroupCreator";
 import { BottomTabs } from "./BottomTabs";
 import {
   StackAuthenticationNavigationParamList,
