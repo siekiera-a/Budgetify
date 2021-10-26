@@ -32,3 +32,18 @@ export type Profile = User & {
   blikNumber: string;
   bankAccount: string;
 };
+
+export type CreateGroupRequest = {
+  name: string;
+  avatar?: string;
+  members: number[];
+};
+
+export type GroupResponse = {
+  id: number;
+  name: string;
+  avatar: string | null;
+  creationTime: string;
+  owner: User;
+  members: User[];
+};
