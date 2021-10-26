@@ -20,6 +20,15 @@ const strings: Dictionary = {
   settings: "Ustawienia",
   invalidCredentials: "Nieprawidłowe dane logowania",
   unknownError: "Ups... Coś poszło nie tak",
+  createGroup: "Utwórz grupę",
+  groupName: "Nazwa grupy",
+  create: "Utwórz",
+  addMember: "Dodaj członka",
+  members: "Członkowie",
+  searchPeople: "Szukaj znajomych",
+  search: "Szukaj",
+  noResults: "Brak wyników",
+  noMembersYet: "Nie masz jeszcze dodanych żadnych członków",
 };
 
 export default strings;

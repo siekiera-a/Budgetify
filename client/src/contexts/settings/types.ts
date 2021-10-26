@@ -30,4 +30,13 @@ export type StringId =
   | "groups"
   | "settings"
   | "invalidCredentials"
-  | "unknownError";
+  | "unknownError"
+  | "createGroup"
+  | "groupName"
+  | "create"
+  | "addMember"
+  | "members"
+  | "searchPeople"
+  | "search"
+  | "noResults"
+  | "noMembersYet";
