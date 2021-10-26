@@ -11,6 +11,7 @@ import {
   TextInput,
 } from "react-native-paper";
 import { useSettings } from "../../../contexts";
+import { User } from "../../../libs";
 import { EditImage, View } from "../../../ui";
 import { CreateGroupStackNavigatorParams } from "./GroupCreator";
 import { ListItem } from "./ListItem";
@@ -42,6 +43,10 @@ export function CreateGroup({ navigation, service }: Props) {
     },
     [send]
   );
+
+  const onDeletePress = (user: User) => {
+    send({ type: "DELETE_USER", user });
+  };
 
   return (
     <View style={styles.view}>
@@ -84,7 +89,15 @@ export function CreateGroup({ navigation, service }: Props) {
           <FlatList
             data={members}
             renderItem={({ item }) => (
-              <ListItem user={item} icon={<IconButton icon="delete" />} />
+              <ListItem
+                user={item}
+                icon={
+                  <IconButton
+                    icon="delete"
+                    onPress={() => onDeletePress(item)}
+                  />
+                }
+              />
             )}
             keyExtractor={(item) => item.id.toString()}
             ListEmptyComponent={() => (

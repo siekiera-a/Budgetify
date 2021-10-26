@@ -44,6 +44,7 @@ export const groupModel = createModel(
       SEARCH_PEOPLE: () => ({}),
       EXIT: () => ({}),
       USER_SELECTED: (user: User) => ({ user }),
+      DELETE_USER: (user: User) => ({ user }),
     },
   }
 );

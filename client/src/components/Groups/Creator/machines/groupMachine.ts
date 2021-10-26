@@ -20,6 +20,9 @@ export function createGroupMachine(http: HttpClient) {
           SEARCH_PEOPLE: {
             target: "searchPeople",
           },
+          DELETE_USER: {
+            actions: removeMember,
+          },
         },
       },
       searchPeople: {
@@ -54,8 +57,20 @@ const spawnSearchUsersMachine = model.assign({
   },
 });
 
-const addMember = model.assign({
-  members: (context, event) => {
-    return [...context.members, event.user]
-  }
-}, "USER_SELECTED")
+const addMember = model.assign(
+  {
+    members: (context, event) => {
+      return [...context.members, event.user];
+    },
+  },
+  "USER_SELECTED"
+);
+
+const removeMember = model.assign(
+  {
+    members: ({ members }, { user }) => {
+      return members.filter((member) => member.id !== user.id);
+    },
+  },
+  "DELETE_USER"
+);
