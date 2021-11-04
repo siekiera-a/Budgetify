@@ -13,6 +13,7 @@ import pl.siekiera.budgetify.repository.UserRepository;
 import pl.siekiera.budgetify.service.GroupService;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,5 +48,10 @@ public class GroupServiceImpl implements GroupService {
 
         groupRepository.save(group);
         return group;
+    }
+
+    @Override
+    public List<GroupEntity> findAll(UserEntity user) {
+        return groupRepository.findAll(user);
     }
 }

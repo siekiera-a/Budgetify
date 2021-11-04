@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.service.GroupService;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/group")
@@ -34,6 +37,15 @@ public class GroupController {
         UserEntity me = (UserEntity) authentication.getPrincipal();
         GroupEntity group = groupService.create(request, me);
         return new ResponseEntity<>(new GroupResponse(group), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GroupResponse>> getGroups(Authentication authentication) {
+        UserEntity me = (UserEntity) authentication.getPrincipal();
+        List<GroupEntity> groups = groupService.findAll(me);
+        return new ResponseEntity<>(groups.stream()
+            .map(GroupResponse::new)
+            .collect(Collectors.toUnmodifiableList()), HttpStatus.OK);
     }
 
 }
