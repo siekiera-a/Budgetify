@@ -14,7 +14,7 @@ import { useSettings } from "../../../contexts";
 import { User } from "../../../libs";
 import { EditImage, View } from "../../../ui";
 import { CreateGroupStackNavigatorParams } from "./GroupCreator";
-import { ListItem } from "./ListItem";
+import { UserListItem } from "./UserListItem";
 import { GroupActor } from "./machines/groupMachine";
 
 type Group = {
@@ -93,7 +93,7 @@ export function CreateGroup({ navigation, service }: Props) {
           <FlatList
             data={members}
             renderItem={({ item }) => (
-              <ListItem
+              <UserListItem
                 user={item}
                 icon={
                   <IconButton

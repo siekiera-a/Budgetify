@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { IconButton, List } from "react-native-paper";
+import { List } from "react-native-paper";
 import { User } from "../../../libs";
 import { Avatar } from "../../../ui";
 
@@ -9,7 +9,7 @@ type Props = {
   icon?: React.ReactNode;
 };
 
-export function ListItem({ user, icon }: Props) {
+export function UserListItem({ user, icon }: Props) {
   return (
     <List.Item
       title={user.name}

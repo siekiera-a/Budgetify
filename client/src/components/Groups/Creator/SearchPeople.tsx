@@ -5,7 +5,7 @@ import { IconButton, Searchbar, Surface, Text } from "react-native-paper";
 import { useSettings } from "../../../contexts";
 import { User } from "../../../libs";
 import { View } from "../../../ui";
-import { ListItem } from "./ListItem";
+import { UserListItem } from "./UserListItem";
 import { SearchUsersActor } from "./machines/searchUsersMachine";
 
 type Props = {
@@ -47,7 +47,7 @@ export function SearchPeople({ service }: Props) {
           <FlatList
             data={results}
             renderItem={({ item }) => (
-              <ListItem
+              <UserListItem
                 user={item}
                 icon={
                   <IconButton icon="plus" onPress={() => onAddPress(item)} />
