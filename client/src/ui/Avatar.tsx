@@ -1,13 +1,16 @@
 import random from "lodash/random";
 import React from "react";
-import { ViewProps } from "react-native";
+import { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { Avatar } from "react-native-paper";
 
 type Props = {
   name: string;
   avatar: string | null;
   size?: number;
-} & Pick<ViewProps, "style">;
+  labelStyle?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
+  disableNameFormating?: boolean;
+};
 
 const stylesMap = [
   { background: "#3f37c9", color: "#fff" },
@@ -35,6 +38,8 @@ export const AvatarComponent = React.memo(function AvatarComponent({
   avatar,
   size = 64,
   style,
+  labelStyle,
+  disableNameFormating = false,
 }: Props) {
   if (avatar) {
     return <Avatar.Image source={{ uri: avatar }} size={size} style={style} />;
@@ -44,10 +49,11 @@ export const AvatarComponent = React.memo(function AvatarComponent({
 
   return (
     <Avatar.Text
-      label={formatName(name)}
+      label={disableNameFormating ? name : formatName(name)}
       size={size}
       color={styles.color}
       style={[style, { backgroundColor: styles.background }]}
+      labelStyle={labelStyle}
     />
   );
 });
