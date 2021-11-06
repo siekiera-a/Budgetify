@@ -11,5 +11,6 @@ export const darkTheme: Theme = {
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
+    touchableHighlight: "#222"
   },
 };

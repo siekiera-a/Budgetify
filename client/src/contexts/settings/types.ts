@@ -9,7 +9,11 @@ export type Dictionary = Record<StringId, string>;
 export type LanguageDictionary = Record<Language, Dictionary>;
 
 export type Colors = Pick<NavigationTheme, "colors"> &
-  Pick<ReactNativePaper.Theme, "colors">;
+  Pick<ReactNativePaper.Theme, "colors"> & {
+    colors: {
+      touchableHighlight: string;
+    };
+  };
 
 export type Theme = Omit<ReactNativePaper.Theme, "colors"> & Colors;
 
