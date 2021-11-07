@@ -46,7 +46,6 @@ export function createGroupMachine(http: HttpClient) {
           },
           on: {
             GROUP_CREATED: {
-              actions: () => console.log("done"),
               target: "final",
             },
           },
