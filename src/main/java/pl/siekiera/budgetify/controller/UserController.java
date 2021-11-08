@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import pl.siekiera.budgetify.dto.incoming.LoginRequestBody;
 import pl.siekiera.budgetify.dto.incoming.RegisterRequestBody;
+import pl.siekiera.budgetify.dto.incoming.TokenRequest;
 import pl.siekiera.budgetify.dto.outgoing.LoginResponse;
 import pl.siekiera.budgetify.dto.outgoing.SearchUsersResponse;
 import pl.siekiera.budgetify.entity.UserEntity;
@@ -53,6 +54,14 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @PostMapping("/revoke-token")
+    public ResponseEntity<LoginResponse> revokeToken(@Valid @RequestBody TokenRequest request,
+                                                     Authentication authentication) {
+        UserEntity me = (UserEntity) authentication.getPrincipal();
+        return new ResponseEntity<>(authenticationService.revokeToken(me, request.getToken()),
+            HttpStatus.CREATED);
     }
 
     @GetMapping("/find")

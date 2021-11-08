@@ -3,6 +3,7 @@ package pl.siekiera.budgetify.service;
 import pl.siekiera.budgetify.dto.incoming.LoginRequestBody;
 import pl.siekiera.budgetify.dto.incoming.RegisterRequestBody;
 import pl.siekiera.budgetify.dto.outgoing.LoginResponse;
+import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.exception.UserAlreadyExistsException;
 
 public interface AuthenticationService {
@@ -10,5 +11,7 @@ public interface AuthenticationService {
     LoginResponse register(RegisterRequestBody details) throws UserAlreadyExistsException;
 
     LoginResponse signIn(LoginRequestBody credentials);
+
+    LoginResponse revokeToken(UserEntity user, String token);
 
 }

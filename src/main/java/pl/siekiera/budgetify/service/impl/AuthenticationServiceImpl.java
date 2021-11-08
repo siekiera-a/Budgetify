@@ -16,7 +16,9 @@ import pl.siekiera.budgetify.service.AccountService;
 import pl.siekiera.budgetify.service.AuthenticationService;
 import pl.siekiera.budgetify.service.TokenService;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +57,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.getTokens().add(token);
         userRepository.save(user);
         return new LoginResponse(token.getValue(), new Profile(user));
+    }
+
+    @Override
+    @Transactional
+    public LoginResponse revokeToken(UserEntity user, String token) {
+        user = userRepository.getUserWithTokens(user);
+        Set<TokenEntity> tokens = user.getTokens();
+        Optional<TokenEntity> tokenToRemove = tokens.stream()
+            .filter(tokenEntity -> token.equals(tokenEntity.getValue()))
+            .findFirst();
+        tokenToRemove.ifPresent(tokens::remove);
+        TokenEntity newToken = tokenService.createUniqueToken();
+        tokens.add(newToken);
+        userRepository.save(user);
+        return new LoginResponse(newToken.getValue(), new Profile(user));
     }
 
 }

@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
                                             @Param("id") long myId,
                                             Pageable pageable);
 
+    @Query("select u from UserEntity u join fetch u.tokens where u = :user")
+    UserEntity getUserWithTokens(@Param("user") UserEntity user);
+
 }
