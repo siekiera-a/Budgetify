@@ -36,6 +36,21 @@ export function HttpContextProvider({ children }: HttpContextProps) {
   const [client, setClient] = useState(new HttpClient(""));
   const { clearProfile, loadProfile } = useStorage();
 
+  const setToken = useCallback(
+    async (token: string) => {
+      const logIn = token.length > 0;
+      if (logIn) {
+        await setItemAsync(TOKEN_PERSISTENT_KEY, token);
+      } else {
+        await deleteItemAsync(TOKEN_PERSISTENT_KEY);
+        await clearProfile();
+      }
+      setLoggedIn(logIn);
+      setClient(new HttpClient(token));
+    },
+    [setClient, setLoggedIn, clearProfile]
+  );
+
   useEffect(() => {
     const func = async () => {
       const token = await getItemAsync(TOKEN_PERSISTENT_KEY);
@@ -54,21 +69,7 @@ export function HttpContextProvider({ children }: HttpContextProps) {
       }
     };
     func();
-  }, []);
-
-  const setToken = useCallback(
-    async (token: string) => {
-      const logIn = token.length > 0;
-      if (logIn) {
-        await setItemAsync(TOKEN_PERSISTENT_KEY, token);
-      } else {
-        await deleteItemAsync(TOKEN_PERSISTENT_KEY);
-      }
-      setLoggedIn(logIn);
-      setClient(new HttpClient(token));
-    },
-    [setClient, setLoggedIn]
-  );
+  }, [setToken, clearProfile, loadProfile]);
 
   return <Provider value={{ client, loggedIn, setToken }}>{children}</Provider>;
 }
