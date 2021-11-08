@@ -62,13 +62,11 @@ export function SettingsProvider({ children }: SettingsContextProps) {
   const {
     getItem: getTheme,
     setItem: persistTheme,
-    removeItem: removeTheme,
   } = useAsyncStorage(THEME_PERSISTENT_KEY);
 
   const {
     getItem: getLanguage,
     setItem: persistLanguage,
-    removeItem: removeLanguage,
   } = useAsyncStorage(LANGUAGE_PERSISTENT_KEY);
 
   useEffect(() => {
@@ -104,9 +102,9 @@ export function SettingsProvider({ children }: SettingsContextProps) {
   }, [language]);
 
   const clearSettings = useCallback(() => {
-    removeTheme();
-    removeLanguage();
-  }, [removeLanguage, removeTheme]);
+    setTheme(defaultTheme);
+    setLanguage(defaultLanguage);
+  }, [setTheme, setLanguage]);
 
   const dictionary = useMemo(() => languageDictionary[language], [language]);
 
