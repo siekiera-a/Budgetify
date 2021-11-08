@@ -1,5 +1,12 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
-import { HttpClient } from "../../libs";
+import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { HttpClient, revokeToken } from "../../libs";
 
 interface HttpContext {
   client: HttpClient;
@@ -21,13 +28,39 @@ const context = createContext(defaultValue);
 
 const { Provider } = context;
 
+const TOKEN_PERSISTENT_KEY = "LANGUAGE_KEY";
+
 export function HttpContextProvider({ children }: HttpContextProps) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [client, setClient] = useState(new HttpClient(""));
 
+  useEffect(() => {
+    const func = async () => {
+      const token = await getItemAsync(TOKEN_PERSISTENT_KEY);
+      if (!token) {
+        return;
+      }
+      const client = new HttpClient(token);
+      try {
+        const response = await revokeToken(client, { token: token });
+        await setItemAsync(TOKEN_PERSISTENT_KEY, response.token);
+        await setToken(response.token);
+      } catch (e) {
+        await deleteItemAsync(TOKEN_PERSISTENT_KEY);
+      }
+    };
+    func();
+  }, []);
+
   const setToken = useCallback(
-    (token: string) => {
-      setLoggedIn(token.length > 0);
+    async (token: string) => {
+      const logIn = token.length > 0;
+      if (logIn) {
+        await setItemAsync(TOKEN_PERSISTENT_KEY, token);
+      } else {
+        await deleteItemAsync(TOKEN_PERSISTENT_KEY);
+      }
+      setLoggedIn(logIn);
       setClient(new HttpClient(token));
     },
     [setClient, setLoggedIn]

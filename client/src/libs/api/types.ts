@@ -47,3 +47,7 @@ export type GroupResponse = {
   owner: User;
   members: User[];
 };
+
+export type TokenRequest = {
+  token: string;
+}
