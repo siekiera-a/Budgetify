@@ -9,7 +9,7 @@ export type RegisterRequest = LoginRequest & {
 
 export type LoginResponse = {
   token: string;
-  user: Profile;
+  profile: Profile;
 };
 
 export type SearchUsersResponse = {

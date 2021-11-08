@@ -27,7 +27,7 @@ export function LoginView() {
     try {
       const response = await signIn(client, data);
       await setToken(response.token);
-      await saveProfile(response.user);
+      await saveProfile(response.profile);
     } catch (e) {
       const invalidCredentials =
         e instanceof ErrorResponse &&
