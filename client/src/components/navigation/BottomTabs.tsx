@@ -6,6 +6,7 @@ import { TabNavigationParamList } from "./types";
 import { View } from "../../ui/View";
 import { useSettings } from "../../contexts";
 import { GroupsView } from "../Groups/GroupsView";
+import { Settings } from "../Settings";
 
 const Tab = createBottomTabNavigator<TabNavigationParamList>();
 
@@ -57,7 +58,7 @@ export function BottomTabs() {
       />
       <Tab.Screen
         name="Settings"
-        component={Component}
+        component={Settings}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings" color={color} size={size} />

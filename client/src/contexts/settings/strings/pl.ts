@@ -29,6 +29,8 @@ const strings: Dictionary = {
   search: "Szukaj",
   noResults: "Brak wyników",
   noMembersYet: "Nie masz jeszcze dodanych żadnych członków",
+  logout: "Wyloguj się",
+  darkTheme: "Ciemny motyw",
 };
 
 export default strings;

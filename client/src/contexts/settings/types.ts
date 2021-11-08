@@ -43,4 +43,6 @@ export type StringId =
   | "searchPeople"
   | "search"
   | "noResults"
-  | "noMembersYet";
+  | "noMembersYet"
+  | "logout"
+  | "darkTheme";
