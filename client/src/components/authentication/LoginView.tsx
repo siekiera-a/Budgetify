@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { useHttp, useSettings } from "../../contexts";
+import { useHttp, useSettings, useStorage } from "../../contexts";
 import { ErrorResponse, signIn } from "../../libs";
 import { ErrorMessage, SafeAreaView, Stack } from "../../ui";
 import { Credentials } from "./types";
@@ -11,6 +11,7 @@ import { Credentials } from "./types";
 export function LoginView() {
   const { dictionary } = useSettings();
   const { client, setToken } = useHttp();
+  const { saveProfile } = useStorage();
   const {
     handleSubmit,
     control,
@@ -25,7 +26,8 @@ export function LoginView() {
   const handleRequest = async (data: Credentials) => {
     try {
       const response = await signIn(client, data);
-      setToken(response.token);
+      await setToken(response.token);
+      await saveProfile(response.user);
     } catch (e) {
       const invalidCredentials =
         e instanceof ErrorResponse &&

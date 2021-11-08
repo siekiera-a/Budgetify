@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { useStorage } from "../storage/StorageContext";
 import { HttpClient, revokeToken } from "../../libs";
 
 interface HttpContext {
@@ -33,6 +34,7 @@ const TOKEN_PERSISTENT_KEY = "LANGUAGE_KEY";
 export function HttpContextProvider({ children }: HttpContextProps) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [client, setClient] = useState(new HttpClient(""));
+  const { clearProfile, loadProfile } = useStorage();
 
   useEffect(() => {
     const func = async () => {
@@ -45,8 +47,10 @@ export function HttpContextProvider({ children }: HttpContextProps) {
         const response = await revokeToken(client, { token: token });
         await setItemAsync(TOKEN_PERSISTENT_KEY, response.token);
         await setToken(response.token);
+        await loadProfile();
       } catch (e) {
         await deleteItemAsync(TOKEN_PERSISTENT_KEY);
+        await clearProfile();
       }
     };
     func();

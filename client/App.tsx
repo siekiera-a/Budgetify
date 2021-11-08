@@ -6,6 +6,7 @@ import { Navigation } from "./src/components/navigation/Navigation";
 import {
   HttpContextProvider,
   SettingsProvider,
+  StorageContextProvider,
   useSettings,
 } from "./src/contexts";
 
@@ -23,10 +24,12 @@ const AppComponent = () => {
 
 export default function App() {
   return (
-    <SettingsProvider>
-      <HttpContextProvider>
-        <AppComponent />
-      </HttpContextProvider>
-    </SettingsProvider>
+    <StorageContextProvider>
+      <SettingsProvider>
+        <HttpContextProvider>
+          <AppComponent />
+        </HttpContextProvider>
+      </SettingsProvider>
+    </StorageContextProvider>
   );
 }
