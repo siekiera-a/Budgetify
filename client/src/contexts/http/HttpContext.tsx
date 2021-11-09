@@ -34,7 +34,7 @@ const TOKEN_PERSISTENT_KEY = "LANGUAGE_KEY";
 export function HttpContextProvider({ children }: HttpContextProps) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [client, setClient] = useState(new HttpClient(""));
-  const { clearProfile, loadProfile } = useStorage();
+  const { clearProfile, saveProfile } = useStorage();
 
   const setToken = useCallback(
     async (token: string) => {
@@ -62,14 +62,14 @@ export function HttpContextProvider({ children }: HttpContextProps) {
         const response = await revokeToken(client, { token: token });
         await setItemAsync(TOKEN_PERSISTENT_KEY, response.token);
         await setToken(response.token);
-        await loadProfile();
+        await saveProfile(response.profile);
       } catch (e) {
         await deleteItemAsync(TOKEN_PERSISTENT_KEY);
         await clearProfile();
       }
     };
     func();
-  }, [setToken, clearProfile, loadProfile]);
+  }, [setToken, clearProfile, saveProfile]);
 
   return <Provider value={{ client, loggedIn, setToken }}>{children}</Provider>;
 }

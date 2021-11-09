@@ -10,7 +10,6 @@ import { Profile } from "../../libs";
 export interface StorageContext {
   saveProfile(profile: Profile): Promise<void>;
   clearProfile(): Promise<void>;
-  loadProfile(): Promise<void>;
   profile?: Profile;
 }
 
@@ -21,7 +20,6 @@ export interface StorageContextProps {
 const defaultValue: StorageContext = {
   saveProfile: () => new Promise((resolve) => resolve()),
   clearProfile: () => new Promise((resolve) => resolve()),
-  loadProfile: () => new Promise((resolve) => resolve()),
 };
 
 const storageContext = createContext<StorageContext>(defaultValue);
@@ -32,14 +30,6 @@ const PROFILE_PERSISTANCE_KEY = "PROFILE";
 
 export function StorageContextProvider({ children }: StorageContextProps) {
   const [profile, setProfile] = useState<Profile>();
-
-  const loadProfile = useCallback(async () => {
-    const data = await getItemAsync(PROFILE_PERSISTANCE_KEY);
-    if (data) {
-      const profile = JSON.parse(data) as Profile;
-      setProfile(profile);
-    }
-  }, [setProfile]);
 
   const saveProfile = useCallback(
     async (profile: Profile) => {
@@ -55,7 +45,7 @@ export function StorageContextProvider({ children }: StorageContextProps) {
   }, [setProfile]);
 
   return (
-    <Provider value={{ profile, saveProfile, clearProfile, loadProfile }}>
+    <Provider value={{ profile, saveProfile, clearProfile }}>
       {children}
     </Provider>
   );
