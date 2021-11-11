@@ -1,26 +1,29 @@
-import { useFocusEffect } from "@react-navigation/core";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useFocusEffect, useNavigation } from "@react-navigation/core";
 import React, { useCallback, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { FAB, Text } from "react-native-paper";
 import { useHttp, useSettings } from "../../contexts";
 import { findGroups, GroupResponse } from "../../libs";
-import { SafeAreaView } from "../../ui";
-import { StackNavigationParamList } from "../navigation/types";
 import { GroupListItem } from "./GroupListItem";
+import { GroupAndMainStackNavigation } from "./GroupsTab";
 
-type Props = {
-  navigation: StackNavigationProp<StackNavigationParamList>;
-};
-
-export function GroupsView({ navigation }: Props) {
+export function GroupsView() {
   const { client } = useHttp();
   const { dictionary } = useSettings();
   const [groups, setGroups] = useState<GroupResponse[]>([]);
 
+  const { navigate, push } = useNavigation<GroupAndMainStackNavigation>();
+
   const openCreateGroupView = useCallback(
-    () => navigation.push("CreateGroup"),
-    [navigation]
+    () => navigate("CreateGroup"),
+    [navigate]
+  );
+
+  const goToGroup = useCallback(
+    (group: GroupResponse) => {
+      push("Group", group);
+    },
+    [push]
   );
 
   useFocusEffect(
@@ -38,14 +41,11 @@ export function GroupsView({ navigation }: Props) {
   );
 
   return (
-    <SafeAreaView style={styles.safearea}>
+    <View style={styles.view}>
       <FlatList
         data={groups}
         renderItem={({ item }) => (
-          <GroupListItem
-            {...item}
-            onPress={() => console.log("Pressed")}
-          />
+          <GroupListItem {...item} onPress={goToGroup} />
         )}
         keyExtractor={(group) => group.id.toString()}
         ListEmptyComponent={() => (
@@ -59,12 +59,12 @@ export function GroupsView({ navigation }: Props) {
         style={{ position: "absolute", right: 0, bottom: 0, margin: 16 }}
         onPress={openCreateGroupView}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safearea: {
+  view: {
     flex: 1,
   },
   container: {

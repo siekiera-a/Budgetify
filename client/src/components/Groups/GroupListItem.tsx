@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import { Caption, Surface, Text } from "react-native-paper";
@@ -8,10 +8,11 @@ import { GroupResponse } from "../../libs/api";
 import { Avatar } from "../../ui";
 
 type Props = GroupResponse & {
-  onPress: () => void;
+  onPress: (group: GroupResponse) => void;
 };
 
-export function GroupListItem({ name, avatar, owner, members, onPress }: Props) {
+export function GroupListItem({ onPress: onPressFromProps, ...group }: Props) {
+  const { name, avatar, owner, members } = group;
   const fewMembersWithOwner = members
     .filter((member) => member.id !== owner.id)
     .slice(0, 5);
@@ -23,6 +24,10 @@ export function GroupListItem({ name, avatar, owner, members, onPress }: Props) 
   const memberAvatarSize = 30;
 
   const hiddenMembersCount = members.length - fewMembers.length;
+
+  const onPress = useCallback(() => {
+    onPressFromProps(group);
+  }, [group, onPressFromProps]);
 
   return (
     <Surface style={styles.surface}>

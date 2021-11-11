@@ -1,12 +1,12 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React from "react";
 import { Text } from "react-native-paper";
-import { TabNavigationParamList } from "./types";
-import { View } from "../../ui/View";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { useSettings } from "../../contexts";
-import { GroupsView } from "../Groups/GroupsView";
+import { View } from "../../ui/View";
+import { GroupsTab } from "../Groups/GroupsTab";
 import { Settings } from "../Settings";
+import { TabNavigationParamList } from "./types";
 
 const Tab = createBottomTabNavigator<TabNavigationParamList>();
 
@@ -47,8 +47,8 @@ export function BottomTabs() {
         }}
       />
       <Tab.Screen
-        name="Groups"
-        component={GroupsView}
+        name="GroupsTab"
+        component={GroupsTab}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people" color={color} size={size} />

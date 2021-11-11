@@ -1,7 +1,7 @@
 export type TabNavigationParamList = {
   Analysis: undefined;
   Payments: undefined;
-  Groups: undefined;
+  GroupsTab: undefined;
   Settings: undefined;
 };
 
