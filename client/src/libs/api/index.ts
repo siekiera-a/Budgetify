@@ -4,5 +4,6 @@ export { signUp } from "./signUp";
 export { createGroup } from "./createGroup";
 export { findGroups } from "./findGroups";
 export { revokeToken } from "./revokeToken";
+export { uploadImage } from "./uploadImage";
 
 export * from "./types";

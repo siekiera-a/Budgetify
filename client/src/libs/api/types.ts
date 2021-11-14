@@ -48,6 +48,14 @@ export type GroupResponse = {
   members: User[];
 };
 
+export type FileResponse = {
+  path: string | null;
+};
+
+export type FileRequest = {
+  file: Blob;
+};
+
 export type TokenRequest = {
   token: string;
-}
+};
