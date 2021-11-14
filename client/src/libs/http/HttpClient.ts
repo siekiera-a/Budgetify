@@ -1,5 +1,5 @@
 import { ErrorResponse, mapToErrorResponse } from "./error";
-import { Data, IError } from "./types";
+import { ContentType, Data, HttpOptions, IError } from "./types";
 
 export class HttpClient {
   private static readonly apiUrl = "http://192.168.0.101:8080";
@@ -37,19 +37,22 @@ export class HttpClient {
     url: string,
     data: Data,
     requireAuthorization: boolean,
-    method: "POST" | "PUT"
+    method: "POST" | "PUT",
+    contentType: ContentType = "application/json"
   ): Promise<T> {
     url = this.prepareUrl(url);
     const headers = requireAuthorization
       ? this.authorizationHeaders()
       : new Headers();
 
-    headers.append("Content-Type", "application/json");
+    headers.append("Content-Type", contentType);
+
+    const body = this.getBody(data, contentType);
 
     try {
       const response = await fetch(url, {
         method,
-        body: JSON.stringify(data),
+        body,
         headers,
       });
       return await this.handleResponse(response);
@@ -64,9 +67,14 @@ export class HttpClient {
   public async post<T>(
     url: string,
     data: Data,
-    requireAuthorization = true
-  ): Promise<T> {
-    return this.send(url, data, requireAuthorization, "POST");
+    options: HttpOptions = {
+      contentType: "application/json",
+      requireAuthorization: true,
+    }
+  ) {
+    const { contentType = "application/json", requireAuthorization = true } =
+      options;
+    return this.send<T>(url, data, requireAuthorization, "POST", contentType);
   }
 
   public async put<T>(
@@ -92,6 +100,26 @@ export class HttpClient {
     return HttpClient.apiUrl + url;
   }
 
+  private getBody(data: Data, contentType: ContentType) {
+    if (contentType === "application/json") {
+      return JSON.stringify(data);
+    }
+
+    const formData = new FormData();
+    for (const key in data) {
+      const value = data[key];
+      if (value instanceof Blob) {
+        formData.append(key, value);
+      }
+      const string = this.convertUnknown(value);
+      if (string) {
+        formData.append(key, string);
+      }
+    }
+
+    return formData;
+  }
+
   private authorizationHeaders() {
     if (this.token.length === 0) {
       throw new Error("User not logged in!");
@@ -105,16 +133,7 @@ export class HttpClient {
   private mapParams(params: Data) {
     return Object.entries(params)
       .map(([key, v]) => {
-        let value: string | undefined = undefined;
-
-        switch (typeof v) {
-          case "bigint":
-          case "boolean":
-          case "number":
-          case "string":
-          case "symbol":
-            value = v.toString();
-        }
+        const value = this.convertUnknown(v);
 
         if (!value) {
           return undefined;
@@ -123,5 +142,18 @@ export class HttpClient {
         return `${encodeURI(key)}=${encodeURI(value)}`;
       })
       .filter((e) => !!e);
+  }
+
+  private convertUnknown(value: unknown) {
+    switch (typeof value) {
+      case "bigint":
+      case "boolean":
+      case "number":
+      case "string":
+      case "symbol":
+        return value.toString();
+    }
+
+    return undefined;
   }
 }
