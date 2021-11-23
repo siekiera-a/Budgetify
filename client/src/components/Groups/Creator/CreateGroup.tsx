@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useActor } from "@xstate/react";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, StyleSheet } from "react-native";
 import {
@@ -13,9 +13,10 @@ import {
 import { useSettings } from "../../../contexts";
 import { User } from "../../../libs";
 import { EditImage, View } from "../../../ui";
+import { ImagePicker } from "../../ImagePicker";
 import { CreateGroupStackNavigatorParams } from "./GroupCreator";
-import { UserListItem } from "./UserListItem";
 import { GroupActor } from "./machines/groupMachine";
+import { UserListItem } from "./UserListItem";
 
 type Group = {
   name: string;
@@ -29,6 +30,7 @@ export function CreateGroup({ navigation, service }: Props) {
   const { dictionary, theme } = useSettings();
   const [current, send] = useActor(service);
   const { control } = useForm<Group>({ defaultValues: { name: "" } });
+  const [visible, setVisible] = useState(false);
 
   const { photo, name, members } = current.context;
 
@@ -52,6 +54,21 @@ export function CreateGroup({ navigation, service }: Props) {
     send("CREATE");
   }, [send]);
 
+  const dismiss = useCallback(() => {
+    setVisible(false);
+  }, [setVisible]);
+
+  const onEditImagePress = useCallback(() => {
+    setVisible(true);
+  }, [setVisible]);
+
+  const onImagesLoaded = useCallback(
+    (data: string[]) => {
+      send({ type: "SET_IMAGE", image: data[0] });
+    },
+    [send]
+  );
+
   return (
     <View style={styles.view}>
       <Surface style={styles.surface}>
@@ -61,6 +78,7 @@ export function CreateGroup({ navigation, service }: Props) {
           backgroundColor={theme.colors.background}
           borderColor={theme.colors.border}
           image={photo}
+          onPress={onEditImagePress}
         />
         <Controller
           name="name"
@@ -110,7 +128,15 @@ export function CreateGroup({ navigation, service }: Props) {
           />
         </Surface>
       </View>
-      <Button mode="contained" onPress={createGroup}>{dictionary.create}</Button>
+      <Button mode="contained" onPress={createGroup}>
+        {dictionary.create}
+      </Button>
+
+      <ImagePicker
+        visible={visible}
+        onDismiss={dismiss}
+        onImagesLoaded={onImagesLoaded}
+      />
     </View>
   );
 }

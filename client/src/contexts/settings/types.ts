@@ -45,4 +45,7 @@ export type StringId =
   | "noResults"
   | "noMembersYet"
   | "logout"
-  | "darkTheme";
+  | "darkTheme"
+  | "camera"
+  | "gallery"
+  | "addPicture";

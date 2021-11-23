@@ -27,6 +27,9 @@ export function createGroupMachine(http: HttpClient) {
             CREATE: {
               target: "createGroup",
             },
+            SET_IMAGE: {
+              actions: setImage,
+            },
           },
         },
         searchPeople: {
@@ -63,7 +66,7 @@ export function createGroupMachine(http: HttpClient) {
             try {
               const response = await createGroup(http, {
                 name,
-                avatar: photo,
+                // avatar: photo,
                 members: members.map((member) => member.id),
               });
               callback({ type: "GROUP_CREATED", data: response });
@@ -109,4 +112,13 @@ const removeMember = model.assign(
     },
   },
   "DELETE_USER"
+);
+
+const setImage = model.assign(
+  {
+    photo: (_, e) => {
+      return e.image;
+    },
+  },
+  "SET_IMAGE"
 );

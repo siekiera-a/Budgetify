@@ -31,6 +31,9 @@ const strings: Dictionary = {
   noMembersYet: "Nie masz jeszcze dodanych żadnych członków",
   logout: "Wyloguj się",
   darkTheme: "Ciemny motyw",
+  camera: "Aparat",
+  gallery: "Galeria",
+  addPicture: "Dodaj zdjęcie",
 };
 
 export default strings;

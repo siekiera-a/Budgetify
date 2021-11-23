@@ -49,6 +49,7 @@ export const groupModel = createModel(
       CREATE: () => ({}),
       ERROR: (error: ErrorResponse) => ({ error }),
       GROUP_CREATED: (data: GroupResponse) => ({ data }),
+      SET_IMAGE: (image: string | undefined) => ({ image }),
     },
   }
 );
