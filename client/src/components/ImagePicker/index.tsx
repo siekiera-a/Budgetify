@@ -8,10 +8,18 @@ import { createImageSelectorMachine } from "./imageSelectorMachine";
 type Props = {
   onImagesLoaded: (images: string[]) => void;
   onDismiss?: () => void;
+  onDeleteImage?: () => void;
+  deleteAvailable?: boolean;
   visible: boolean;
 };
 
-export function ImagePicker({ onImagesLoaded, onDismiss, visible }: Props) {
+export function ImagePicker({
+  onImagesLoaded,
+  onDismiss,
+  visible,
+  deleteAvailable = false,
+  onDeleteImage,
+}: Props) {
   const { dictionary } = useSettings();
   const [, send, service] = useMachine(createImageSelectorMachine());
 
@@ -38,6 +46,15 @@ export function ImagePicker({ onImagesLoaded, onDismiss, visible }: Props) {
     }
   }, [send, onDismiss]);
 
+  const deletePress = useCallback(() => {
+    if (onDeleteImage) {
+      onDeleteImage();
+    }
+    if (onDismiss) {
+      onDismiss();
+    }
+  }, [onDeleteImage, onDismiss]);
+
   return (
     <BottomAction
       title={dictionary.addPicture}
@@ -47,6 +64,7 @@ export function ImagePicker({ onImagesLoaded, onDismiss, visible }: Props) {
       <ImagePickerPrompt
         onCameraPress={cameraPress}
         onGalleryPress={galleryPress}
+        onDeletePress={deleteAvailable ? deletePress : undefined}
       />
     </BottomAction>
   );

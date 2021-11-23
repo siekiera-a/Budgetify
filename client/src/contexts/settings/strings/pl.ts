@@ -34,6 +34,7 @@ const strings: Dictionary = {
   camera: "Aparat",
   gallery: "Galeria",
   addPicture: "Dodaj zdjęcie",
+  delete: "Usuń",
 };
 
 export default strings;

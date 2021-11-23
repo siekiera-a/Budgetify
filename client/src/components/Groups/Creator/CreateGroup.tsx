@@ -69,6 +69,10 @@ export function CreateGroup({ navigation, service }: Props) {
     [send]
   );
 
+  const onDeleteImage = useCallback(() => {
+    send({ type: "SET_IMAGE", image: undefined });
+  }, [send]);
+
   return (
     <View style={styles.view}>
       <Surface style={styles.surface}>
@@ -136,6 +140,8 @@ export function CreateGroup({ navigation, service }: Props) {
         visible={visible}
         onDismiss={dismiss}
         onImagesLoaded={onImagesLoaded}
+        deleteAvailable={!!photo}
+        onDeleteImage={onDeleteImage}
       />
     </View>
   );

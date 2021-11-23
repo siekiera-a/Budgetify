@@ -48,4 +48,5 @@ export type StringId =
   | "darkTheme"
   | "camera"
   | "gallery"
-  | "addPicture";
+  | "addPicture"
+  | "delete";
