@@ -35,6 +35,7 @@ export function BottomAction({
   );
 
   const [height, setHeight] = useState(0);
+  const [bottom, setBottom] = useState<number>();
   const slideAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -48,9 +49,10 @@ export function BottomAction({
 
   const onLayout = useCallback(
     (e: LayoutChangeEvent) => {
+      setBottom(0);
       setHeight(e.nativeEvent.layout.height);
     },
-    [setHeight]
+    [setHeight, setBottom]
   );
 
   return (
@@ -77,6 +79,7 @@ export function BottomAction({
               },
             ],
           },
+          bottom !== undefined ? { bottom } : undefined,
         ]}
         onLayout={onLayout}
       >
@@ -109,7 +112,7 @@ const createStyles = (titlePosition: TitlePosition) => {
     surfaceContainer: {
       position: "absolute",
       width: "100%",
-      bottom: 0,
+      bottom: "100%",
     },
     title: {
       textAlign: titlePosition,
