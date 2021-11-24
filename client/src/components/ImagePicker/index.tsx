@@ -28,9 +28,13 @@ export function ImagePicker({
       if (e.matches("imageReaded")) {
         const { images } = service.getSnapshot().context;
         onImagesLoaded([...images]);
+        send("RESTART");
+      }
+      if (e.matches("imageNotReaded")) {
+        send("RESTART");
       }
     });
-  }, [service, onImagesLoaded]);
+  }, [service, onImagesLoaded, send]);
 
   const cameraPress = useCallback(() => {
     send({ type: "SELECT_SOURCE", source: "CAMERA" });

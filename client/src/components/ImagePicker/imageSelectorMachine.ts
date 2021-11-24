@@ -23,6 +23,7 @@ const model = createModel(
       PERMISSIONS_READED: (result: boolean) => ({ result }),
       ERROR: () => ({}),
       IMAGES_LOADED: (images: string[]) => ({ images }),
+      RESTART: () => ({}),
     },
   }
 );
@@ -80,9 +81,21 @@ export function createImageSelectorMachine() {
           },
         },
         imageNotReaded: {
-          type: "final",
+          on: {
+            RESTART: {
+              target: "waitForSource",
+              actions: restartMachine,
+            },
+          },
         },
-        imageReaded: {},
+        imageReaded: {
+          on: {
+            RESTART: {
+              actions: restartMachine,
+              target: "waitForSource",
+            },
+          },
+        },
       },
     },
     {
@@ -165,4 +178,9 @@ const setError = model.assign(
     success: () => false,
   },
   "ERROR"
+);
+
+const restartMachine = model.assign(
+  () => ({ ...model.initialContext }),
+  "RESTART"
 );
