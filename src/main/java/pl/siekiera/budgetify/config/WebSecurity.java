@@ -39,6 +39,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
             .and()
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, "/user", "/user/login").permitAll()
+            .antMatchers(HttpMethod.GET, "/files/images/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);

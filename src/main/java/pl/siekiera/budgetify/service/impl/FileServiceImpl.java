@@ -9,15 +9,17 @@ import org.apache.tika.mime.MediaType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pl.siekiera.budgetify.controller.FileController;
 import pl.siekiera.budgetify.exception.FileTypeNotAllowedException;
 import pl.siekiera.budgetify.model.Image;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 @Service
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -41,11 +43,6 @@ public class FileServiceImpl extends AbstractFileService {
         tika = new Tika();
     }
 
-    private Path getUploadPath(MediaType type) {
-        String fileName = createFileNameWithExtension(type);
-        return Path.of(uploadDir.toString(), fileName);
-    }
-
     @Override
     public String uploadFile(InputStream stream) throws FileTypeNotAllowedException {
         BufferedInputStream bufferedStream = new BufferedInputStream(stream);
@@ -59,31 +56,27 @@ public class FileServiceImpl extends AbstractFileService {
             throw new FileTypeNotAllowedException(mediaType + " not allowed!");
         }
 
-        Path filePath = getUploadPath(mediaType);
+        String fileName = createFileNameWithExtension(mediaType);
+        Path filePath = Path.of(uploadDir.toString(), fileName);
+        byte[] bytes;
 
         try {
-            Files.copy(stream, filePath);
-        } catch (FileAlreadyExistsException e) {
-            filePath = getUploadPath(mediaType);
-            try {
-                Files.copy(stream, filePath);
-            } catch (IOException ioException) {
-                log.error(e);
-            }
+            bytes = bufferedStream.readAllBytes();
+            bufferedStream.close();
+            Files.write(filePath, bytes, StandardOpenOption.CREATE_NEW);
         } catch (IOException e) {
             log.error(e);
+            try {
+                bufferedStream.close();
+            } catch (IOException err) {
+                log.error(err);
+            }
             return null;
-        }
-
-        try {
-            bufferedStream.close();
-        } catch (IOException e) {
-            log.error("Stream close error", e);
         }
 
         log.info(String.format("File: %s uploaded to %s directory",
             filePath.getFileName(), uploadDir.toAbsolutePath()));
-        return filePath.toString();
+        return getFilePath(fileName);
     }
 
     @Override
@@ -112,4 +105,13 @@ public class FileServiceImpl extends AbstractFileService {
 
         return null;
     }
+
+    private String getFilePath(String filename) {
+        return ServletUriComponentsBuilder.fromCurrentRequest()
+            .replacePath(FileController.imagesDirectory)
+            .path("/" + filename)
+            .build()
+            .toString();
+    }
+
 }
