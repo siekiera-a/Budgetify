@@ -1,3 +1,5 @@
+import { User } from "../../libs";
+
 export type TabNavigationParamList = {
   Analysis: undefined;
   Payments: undefined;
@@ -13,4 +15,7 @@ export type StackAuthenticationNavigationParamList = {
 export type StackNavigationParamList = {
   App: undefined;
   CreateGroup: undefined;
+  SettlementCreator: {
+    users: User[];
+  };
 };

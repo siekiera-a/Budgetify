@@ -1,20 +1,27 @@
-import {
-  RouteProp
-} from "@react-navigation/core";
-import React from "react";
+import { RouteProp, useNavigation } from "@react-navigation/core";
+import React, { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
-import { IconButton, Surface, Title } from "react-native-paper";
+import { FAB, IconButton, Surface, Title } from "react-native-paper";
 import { useSettings } from "../../contexts";
 import { EditImage } from "../../ui";
-import { GroupNavigationParamList } from "./GroupsTab";
+import {
+  GroupAndMainStackNavigation,
+  GroupNavigationParamList,
+} from "./GroupsTab";
 
 type Props = {
   route: RouteProp<GroupNavigationParamList, "Group">;
 };
 
 export function Group({ route }: Props) {
-  const { avatar, name } = route.params;
+  const { avatar, name, members } = route.params;
   const { theme } = useSettings();
+  const { navigate } = useNavigation<GroupAndMainStackNavigation>();
+
+  const openSettlementCreator = useCallback(
+    () => navigate("SettlementCreator", { users: members }),
+    [navigate]
+  );
 
   return (
     <View style={styles.viewContainer}>
@@ -34,6 +41,8 @@ export function Group({ route }: Props) {
           size={30}
         />
       </Surface>
+
+      <FAB icon="plus" style={styles.fab} onPress={openSettlementCreator} />
     </View>
   );
 }
@@ -55,5 +64,11 @@ const styles = StyleSheet.create({
   groupName: {
     marginHorizontal: 20,
     flex: 1,
+  },
+  fab: {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    margin: 16,
   },
 });

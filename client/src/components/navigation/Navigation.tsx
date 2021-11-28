@@ -5,10 +5,11 @@ import { useHttp, useSettings } from "../../contexts";
 import { LoginView } from "../authentication/LoginView";
 import { RegisterView } from "../authentication/RegisterView";
 import { GroupCreator } from "../Groups/Creator/GroupCreator";
+import { SettlementCreator } from "../SettlementCreator";
 import { BottomTabs } from "./BottomTabs";
 import {
   StackAuthenticationNavigationParamList,
-  StackNavigationParamList
+  StackNavigationParamList,
 } from "./types";
 
 const AuthenticationStack =
@@ -29,6 +30,10 @@ export function Navigation() {
         >
           <Stack.Screen name="App" component={BottomTabs} />
           <Stack.Screen name="CreateGroup" component={GroupCreator} />
+          <Stack.Screen
+            name="SettlementCreator"
+            component={SettlementCreator}
+          />
         </Stack.Navigator>
       ) : (
         <AuthenticationStack.Navigator
