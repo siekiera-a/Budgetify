@@ -159,9 +159,11 @@ const styles = StyleSheet.create({
   },
   surface: {
     padding: 8,
+    borderRadius: 8,
   },
   membersSurface: {
     paddingVertical: 8,
+    borderRadius: 8,
   },
   addButton: {
     marginTop: 16,

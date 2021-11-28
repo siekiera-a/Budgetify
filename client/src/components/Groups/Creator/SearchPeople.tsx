@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   },
   surface: {
     paddingVertical: 8,
+    borderRadius: 8,
     marginTop: 16,
     maxHeight: "100%",
   },
