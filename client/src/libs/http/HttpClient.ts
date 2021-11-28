@@ -108,12 +108,11 @@ export class HttpClient {
     const formData = new FormData();
     for (const key in data) {
       const value = data[key];
-      if (value instanceof Blob) {
-        formData.append(key, value);
-      }
-      const string = this.convertUnknown(value);
-      if (string) {
-        formData.append(key, string);
+      const convertedData = this.convertUnknown(value);
+      if (convertedData) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        formData.append(key, convertedData);
       }
     }
 
@@ -135,7 +134,7 @@ export class HttpClient {
       .map(([key, v]) => {
         const value = this.convertUnknown(v);
 
-        if (!value) {
+        if (!value || typeof value === "object") {
           return undefined;
         }
 
@@ -152,6 +151,8 @@ export class HttpClient {
       case "string":
       case "symbol":
         return value.toString();
+      case "object":
+        return value;
     }
 
     return undefined;

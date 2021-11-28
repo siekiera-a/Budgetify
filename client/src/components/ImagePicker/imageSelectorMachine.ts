@@ -7,6 +7,7 @@ import {
   requestMediaLibraryPermissionsAsync,
 } from "expo-image-picker";
 import { ActorRefFrom } from "xstate";
+import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 
 export type Source = "GALLERY" | "CAMERA";
 
@@ -14,7 +15,7 @@ const model = createModel(
   {
     source: "CAMERA" as Source,
     hasPermissions: false,
-    images: [] as string[],
+    images: [] as ImageInfo[],
     success: false,
   },
   {
@@ -22,7 +23,7 @@ const model = createModel(
       SELECT_SOURCE: (source: Source) => ({ source }),
       PERMISSIONS_READED: (result: boolean) => ({ result }),
       ERROR: () => ({}),
-      IMAGES_LOADED: (images: string[]) => ({ images }),
+      IMAGES_LOADED: (images: ImageInfo[]) => ({ images }),
       RESTART: () => ({}),
     },
   }
@@ -128,11 +129,11 @@ export function createImageSelectorMachine() {
                 }));
 
             if (!response.cancelled) {
-              const images = [];
+              const images: ImageInfo[] = [];
               if ("selected" in response) {
-                images.push(...response.selected.map((image) => image.uri));
+                images.push(...response.selected);
               } else {
-                images.push(response.uri);
+                images.push(response);
               }
 
               callback({

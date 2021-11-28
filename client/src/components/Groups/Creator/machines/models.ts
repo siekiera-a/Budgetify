@@ -1,3 +1,4 @@
+import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import { createModel } from "xstate/lib/model";
 import {
   ErrorResponse,
@@ -33,7 +34,7 @@ export const searchUsersModel = createModel(
 export const groupModel = createModel(
   {
     name: "",
-    photo: undefined as string | undefined,
+    photo: undefined as ImageInfo | string | undefined,
     members: [] as User[],
     http: new HttpClient(""),
     searchUsersService: undefined as SearchUsersActor | undefined,
@@ -49,7 +50,7 @@ export const groupModel = createModel(
       CREATE: () => ({}),
       ERROR: (error: ErrorResponse) => ({ error }),
       GROUP_CREATED: (data: GroupResponse) => ({ data }),
-      SET_IMAGE: (image: string | undefined) => ({ image }),
+      SET_IMAGE: (image: ImageInfo | string | undefined) => ({ image }),
     },
   }
 );

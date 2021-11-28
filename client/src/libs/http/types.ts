@@ -7,7 +7,7 @@ export interface IError {
 
 export type Data = Record<string, unknown>;
 
-export type ContentType = "application/json" | "multipart/form-data"
+export type ContentType = "application/json" | "multipart/form-data";
 
 export type HttpOptions = {
   requireAuthorization?: boolean;

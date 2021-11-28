@@ -1,3 +1,5 @@
+import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
+
 export type LoginRequest = {
   email: string;
   password: string;
@@ -52,8 +54,14 @@ export type FileResponse = {
   path: string | null;
 };
 
+export type FileData = {
+  name: string;
+  type: string;
+  uri: string;
+};
+
 export type FileRequest = {
-  file: Blob;
+  file: FileData;
 };
 
 export type TokenRequest = {

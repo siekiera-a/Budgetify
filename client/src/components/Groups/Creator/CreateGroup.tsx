@@ -1,5 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useActor } from "@xstate/react";
+import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import React, { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FlatList, StyleSheet } from "react-native";
@@ -63,7 +64,7 @@ export function CreateGroup({ navigation, service }: Props) {
   }, [setVisible]);
 
   const onImagesLoaded = useCallback(
-    (data: string[]) => {
+    (data: ImageInfo[]) => {
       send({ type: "SET_IMAGE", image: data[0] });
     },
     [send]
@@ -81,7 +82,11 @@ export function CreateGroup({ navigation, service }: Props) {
           style={{ marginBottom: 16 }}
           backgroundColor={theme.colors.background}
           borderColor={theme.colors.border}
-          image={photo}
+          image={
+            typeof photo === "string" || typeof photo === "undefined"
+              ? photo
+              : photo.uri
+          }
           onPress={onEditImagePress}
         />
         <Controller

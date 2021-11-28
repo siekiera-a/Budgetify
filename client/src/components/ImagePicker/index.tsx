@@ -1,4 +1,5 @@
 import { useMachine } from "@xstate/react";
+import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import React, { useCallback, useEffect } from "react";
 import { useSettings } from "../../contexts";
 import { BottomAction } from "../../ui";
@@ -6,7 +7,7 @@ import { ImagePickerPrompt } from "./ImagePickerPrompt";
 import { createImageSelectorMachine } from "./imageSelectorMachine";
 
 type Props = {
-  onImagesLoaded: (images: string[]) => void;
+  onImagesLoaded: (images: ImageInfo[]) => void;
   onDismiss?: () => void;
   onDeleteImage?: () => void;
   deleteAvailable?: boolean;
