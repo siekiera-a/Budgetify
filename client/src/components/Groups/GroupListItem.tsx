@@ -3,27 +3,25 @@ import { StyleSheet, View } from "react-native";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import { Caption, Surface, Text } from "react-native-paper";
 import { useSettings } from "../../contexts";
-import { useList } from "../../hooks/useList";
 import { GroupResponse } from "../../libs/api";
-import { Avatar } from "../../ui";
+import { Avatar, AvatarGroup } from "../../ui";
 
 type Props = GroupResponse & {
   onPress: (group: GroupResponse) => void;
 };
 
 export function GroupListItem({ onPress: onPressFromProps, ...group }: Props) {
-  const { name, avatar, owner, members } = group;
-  const fewMembersWithOwner = members
-    .filter((member) => member.id !== owner.id)
-    .slice(0, 5);
+  const { name, avatar, members, owner } = group;
+  const users = [
+    owner,
+    ...members
+      .filter((user) => user.id !== owner.id)
+      .sort((u1, u2) => {
+        return u1.id - u2.id;
+      }),
+  ];
 
-  fewMembersWithOwner.unshift(owner);
-
-  const fewMembers = useList(fewMembersWithOwner);
   const { theme, dictionary } = useSettings();
-  const memberAvatarSize = 30;
-
-  const hiddenMembersCount = members.length - fewMembers.length;
 
   const onPress = useCallback(() => {
     onPressFromProps(group);
@@ -41,34 +39,8 @@ export function GroupListItem({ onPress: onPressFromProps, ...group }: Props) {
             <Avatar name={name} avatar={avatar} size={50} />
             <Text style={styles.groupName}>{name}</Text>
           </View>
-          <View>
-            <Caption>{dictionary.members}</Caption>
-            <View style={styles.membersContainer}>
-              {fewMembers.map(([member, { isLast }]) => (
-                <Avatar
-                  name={member.name}
-                  avatar={member.avatar}
-                  key={member.id}
-                  style={
-                    !isLast || hiddenMembersCount > 0
-                      ? styles.memberAvatar
-                      : undefined
-                  }
-                  size={memberAvatarSize}
-                  labelStyle={styles.avatarLabelStyle}
-                />
-              ))}
-              {hiddenMembersCount > 0 && (
-                <Avatar
-                  name={`+${hiddenMembersCount}`}
-                  avatar={null}
-                  size={memberAvatarSize}
-                  labelStyle={styles.avatarLabelStyle}
-                  disableNameFormating
-                />
-              )}
-            </View>
-          </View>
+          <Caption>{dictionary.members}</Caption>
+          <AvatarGroup max={10} users={users} />
         </View>
       </TouchableHighlight>
     </Surface>
@@ -91,14 +63,5 @@ const styles = StyleSheet.create({
   groupName: {
     marginLeft: 10,
     fontSize: 18,
-  },
-  membersContainer: {
-    flexDirection: "row",
-  },
-  memberAvatar: {
-    marginRight: 8,
-  },
-  avatarLabelStyle: {
-    fontSize: 12,
   },
 });
