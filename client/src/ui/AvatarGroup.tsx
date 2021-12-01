@@ -9,7 +9,7 @@ type Props = {
   avatarSize?: number;
 };
 
-export function AvatarGroup({
+export const AvatarGroup = React.memo(function AvatarGroup({
   users: usersFromProps,
   max,
   avatarSize = 30,
@@ -44,7 +44,7 @@ export function AvatarGroup({
       )}
     </ScrollView>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
