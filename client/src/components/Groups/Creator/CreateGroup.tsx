@@ -147,6 +147,7 @@ export function CreateGroup({ navigation, service }: Props) {
         onImagesLoaded={onImagesLoaded}
         deleteAvailable={!!photo}
         onDeleteImage={onDeleteImage}
+        onOptionPressed={dismiss}
       />
     </View>
   );
