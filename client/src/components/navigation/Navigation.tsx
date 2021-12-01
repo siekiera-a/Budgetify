@@ -18,7 +18,7 @@ const AuthenticationStack =
 const Stack = createStackNavigator<StackNavigationParamList>();
 
 export function Navigation() {
-  const { theme } = useSettings();
+  const { theme, dictionary } = useSettings();
   const { loggedIn } = useHttp();
 
   return (
@@ -33,6 +33,11 @@ export function Navigation() {
           <Stack.Screen
             name="SettlementCreator"
             component={SettlementCreator}
+            options={{
+              headerShown: true,
+              headerTitleAlign: "center",
+              title: dictionary.addInvoice,
+            }}
           />
         </Stack.Navigator>
       ) : (
