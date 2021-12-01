@@ -49,4 +49,10 @@ export type StringId =
   | "camera"
   | "gallery"
   | "addPicture"
-  | "delete";
+  | "delete"
+  | "items"
+  | "add"
+  | "cancel"
+  | "name"
+  | "save"
+  | "addInvoice";

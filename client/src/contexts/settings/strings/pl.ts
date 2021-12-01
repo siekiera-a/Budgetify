@@ -35,6 +35,12 @@ const strings: Dictionary = {
   gallery: "Galeria",
   addPicture: "Dodaj zdjęcie",
   delete: "Usuń",
+  items: "Pozycje",
+  add: "Dodaj",
+  cancel: "Anuluj",
+  name: "Nazwa",
+  save: "Zapisz",
+  addInvoice: "Dodaj paragon",
 };
 
 export default strings;
