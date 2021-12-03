@@ -1,5 +1,3 @@
-import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
-
 export type LoginRequest = {
   email: string;
   password: string;
@@ -41,11 +39,14 @@ export type CreateGroupRequest = {
   members: number[];
 };
 
-export type GroupResponse = {
+export type GroupBase = {
   id: number;
   name: string;
   avatar: string | null;
   creationTime: string;
+};
+
+export type GroupResponse = GroupBase & {
   owner: User;
   members: User[];
 };
