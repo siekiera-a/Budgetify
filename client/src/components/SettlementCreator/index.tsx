@@ -27,12 +27,12 @@ type Props = {
 };
 
 export function SettlementCreator({ route }: Props) {
-  const { users } = route.params;
+  const { users, groupId } = route.params;
   const { dictionary } = useSettings();
   const { goBack } = useNavigation();
 
   const [current, send, service] = useMachine(
-    createSettlementMachine({ users })
+    createSettlementMachine({ users, groupId })
   );
 
   const assignedUsersRef = useRef([] as UserStatus[]);

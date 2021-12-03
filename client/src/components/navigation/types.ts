@@ -17,5 +17,6 @@ export type StackNavigationParamList = {
   CreateGroup: undefined;
   SettlementCreator: {
     users: User[];
+    groupId: number;
   };
 };

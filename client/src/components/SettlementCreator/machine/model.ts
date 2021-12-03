@@ -27,6 +27,7 @@ export const settlementModel = createModel(
     temporaryItem: undefined as Item | undefined,
     orginalItem: undefined as Item | undefined,
     additionalWindowOpen: false,
+    groupId: 0,
   },
   {
     events: {

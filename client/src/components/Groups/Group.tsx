@@ -14,12 +14,12 @@ type Props = {
 };
 
 export function Group({ route }: Props) {
-  const { avatar, name, members } = route.params;
+  const { avatar, name, members, id } = route.params;
   const { theme } = useSettings();
   const { navigate } = useNavigation<GroupAndMainStackNavigation>();
 
   const openSettlementCreator = useCallback(
-    () => navigate("SettlementCreator", { users: members }),
+    () => navigate("SettlementCreator", { users: members, groupId: id }),
     [navigate]
   );
 
