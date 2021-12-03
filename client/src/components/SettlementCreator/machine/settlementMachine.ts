@@ -4,19 +4,16 @@ import { settlementModel as model } from "./model";
 
 type SettlementMachineParams = {
   users: User[];
-  creator: number;
 };
 
 export function createSettlementMachine({
   users,
-  creator,
 }: SettlementMachineParams) {
   return model.createMachine({
     id: "settlement-machine",
     context: {
       ...model.initialContext,
       users,
-      creator,
     },
     initial: "idle",
     states: {

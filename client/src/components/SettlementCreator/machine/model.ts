@@ -26,7 +26,6 @@ export const settlementModel = createModel(
     mode: undefined as Mode | undefined,
     temporaryItem: undefined as Item | undefined,
     orginalItem: undefined as Item | undefined,
-    creator: 0,
     additionalWindowOpen: false,
   },
   {

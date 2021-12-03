@@ -11,7 +11,7 @@ import {
   Subheading,
   Surface,
 } from "react-native-paper";
-import { useSettings, useStorage } from "../../contexts";
+import { useSettings } from "../../contexts";
 import { SafeAreaView, Stack } from "../../ui";
 import { ImagePicker } from "../ImagePicker";
 import { StackNavigationParamList } from "../navigation/types";
@@ -28,12 +28,11 @@ type Props = {
 
 export function SettlementCreator({ route }: Props) {
   const { users } = route.params;
-  const { profile } = useStorage();
   const { dictionary } = useSettings();
   const { goBack } = useNavigation();
 
   const [current, send, service] = useMachine(
-    createSettlementMachine({ users, creator: profile?.id || -1 })
+    createSettlementMachine({ users })
   );
 
   const assignedUsersRef = useRef([] as UserStatus[]);
