@@ -2,6 +2,7 @@ package pl.siekiera.budgetify.dto.outgoing;
 
 import lombok.Value;
 import pl.siekiera.budgetify.entity.InvoiceEntity;
+import pl.siekiera.budgetify.entity.PhotoEntity;
 import pl.siekiera.budgetify.model.Group;
 import pl.siekiera.budgetify.model.InvoiceItem;
 import pl.siekiera.budgetify.model.User;
@@ -18,6 +19,7 @@ public class InvoiceResponse {
     Group group;
     LocalDateTime creationTime;
     List<InvoiceItem> items;
+    List<String> images;
 
     public InvoiceResponse(InvoiceEntity invoice) {
         id = invoice.getId();
@@ -27,6 +29,8 @@ public class InvoiceResponse {
         items = invoice.getItems().stream()
             .map(InvoiceItem::new)
             .collect(Collectors.toUnmodifiableList());
+        images = invoice.getPhotos().stream()
+            .map(PhotoEntity::getPath).collect(Collectors.toList());
     }
 
 }
