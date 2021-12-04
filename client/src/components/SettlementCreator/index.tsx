@@ -11,7 +11,7 @@ import {
   Subheading,
   Surface,
 } from "react-native-paper";
-import { useSettings } from "../../contexts";
+import { useHttp, useSettings } from "../../contexts";
 import { SafeAreaView, Stack } from "../../ui";
 import { ImagePicker } from "../ImagePicker";
 import { StackNavigationParamList } from "../navigation/types";
@@ -30,9 +30,10 @@ export function SettlementCreator({ route }: Props) {
   const { users, groupId } = route.params;
   const { dictionary } = useSettings();
   const { goBack } = useNavigation();
+  const { client } = useHttp();
 
   const [current, send, service] = useMachine(
-    createSettlementMachine({ users, groupId })
+    createSettlementMachine({ users, groupId, http: client })
   );
 
   const assignedUsersRef = useRef([] as UserStatus[]);

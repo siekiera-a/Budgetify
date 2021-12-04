@@ -1,119 +1,220 @@
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
-import { User } from "../../../libs";
+import {
+  convertImageToSend,
+  createInvoice,
+  HttpClient,
+  uploadImage,
+  User,
+} from "../../../libs";
 import { settlementModel as model } from "./model";
 
 type SettlementMachineParams = {
   users: User[];
   groupId: number;
+  http: HttpClient;
 };
 
 export function createSettlementMachine({
   users,
   groupId,
+  http,
 }: SettlementMachineParams) {
-  return model.createMachine({
-    id: "settlement-machine",
-    context: {
-      ...model.initialContext,
-      users,
-      groupId,
-    },
-    initial: "idle",
-    states: {
-      idle: {
-        id: "idle",
-        entry: resetMode,
-        on: {
-          CREATE_ITEM: {
-            actions: createTemporaryItem,
-            target: "creatingItem",
-          },
-          SELECT_PHOTOS: {
-            target: "selectingPhotos",
-          },
-          EDIT: {
-            target: "creatingItem",
-            actions: [setOrginalItem, setTemporaryItem, dropItem],
-          },
-        },
+  return model.createMachine(
+    {
+      id: "settlement-machine",
+      context: {
+        ...model.initialContext,
+        users,
+        groupId,
+        http,
       },
-      creatingItem: {
-        entry: model.assign({ mode: "SELECT_USERS" }),
-        initial: "editing",
-        states: {
-          editing: {
-            on: {
-              SAVE_ITEM: {
-                actions: saveItem,
-                target: "clear",
-              },
-              ASSIGN_USERS: {
-                actions: openWindow,
-                target: "assigning",
-              },
-              CANCEL: {
-                target: "clear",
-                actions: restoreItem,
-              },
+      initial: "idle",
+      states: {
+        idle: {
+          id: "idle",
+          entry: resetMode,
+          on: {
+            CREATE_ITEM: {
+              actions: createTemporaryItem,
+              target: "creatingItem",
             },
-          },
-          assigning: {
-            on: {
-              USERS_ASSIGNED: {
-                actions: assignUsers,
-                target: "editing",
-              },
+            SELECT_PHOTOS: {
+              target: "selectingPhotos",
             },
-          },
-          clear: {
-            always: {
-              actions: [resetMode, clearTemporaryData],
-              target: "#idle",
+            EDIT: {
+              target: "creatingItem",
+              actions: [setOrginalItem, setTemporaryItem, dropItem],
+            },
+            SUBMIT: {
+              target: "save",
             },
           },
         },
-      },
-      selectingPhotos: {
-        entry: model.assign({
-          mode: "SELECT_IMAGE",
-          additionalWindowOpen: true,
-        }),
-        exit: resetMode,
-        initial: "selecting",
-        states: {
-          selecting: {
-            on: {
-              IMAGES_LOADED: {
-                actions: imagesLoaded,
-                target: "clear",
-              },
-              HIDE_WINDOW: {
-                actions: hideWindow,
-              },
-              CLOSE_WINDOW: {
-                actions: closeWindow,
-                target: "clear",
+        creatingItem: {
+          entry: model.assign({ mode: "SELECT_USERS" }),
+          initial: "editing",
+          states: {
+            editing: {
+              on: {
+                SAVE_ITEM: {
+                  actions: saveItem,
+                  target: "clear",
+                },
+                ASSIGN_USERS: {
+                  actions: openWindow,
+                  target: "assigning",
+                },
+                CANCEL: {
+                  target: "clear",
+                  actions: restoreItem,
+                },
               },
             },
-          },
-          clear: {
-            always: {
-              actions: resetMode,
-              target: "#idle",
+            assigning: {
+              on: {
+                USERS_ASSIGNED: {
+                  actions: assignUsers,
+                  target: "editing",
+                },
+              },
+            },
+            clear: {
+              always: {
+                actions: [resetMode, clearTemporaryData],
+                target: "#idle",
+              },
             },
           },
         },
+        selectingPhotos: {
+          entry: model.assign({
+            mode: "SELECT_IMAGE",
+            additionalWindowOpen: true,
+          }),
+          exit: resetMode,
+          initial: "selecting",
+          states: {
+            selecting: {
+              on: {
+                IMAGES_LOADED: {
+                  actions: imagesLoaded,
+                  target: "clear",
+                },
+                HIDE_WINDOW: {
+                  actions: hideWindow,
+                },
+                CLOSE_WINDOW: {
+                  actions: closeWindow,
+                  target: "clear",
+                },
+              },
+            },
+            clear: {
+              always: {
+                actions: resetMode,
+                target: "#idle",
+              },
+            },
+          },
+        },
+        save: {
+          initial: "uploadImages",
+          states: {
+            uploadImages: {
+              invoke: {
+                src: "uploadImages",
+              },
+              on: {
+                IMAGES_UPLOADED: {
+                  target: "createInvoice",
+                  actions: setRemoteUrls,
+                },
+                ERROR: {
+                  target: "#idle",
+                },
+              },
+            },
+            createInvoice: {
+              invoke: {
+                src: "createInvoice",
+              },
+              on: {
+                ERROR: {
+                  target: "#idle",
+                },
+                INVOICE_CREATED: {
+                  target: "#final",
+                },
+              },
+            },
+          },
+        },
+        final: {
+          id: "final",
+          type: "final",
+        },
+      },
+      on: {
+        REMOVE: {
+          actions: removeItem,
+        },
+        DELETE_IMAGE: {
+          actions: deleteImage,
+        },
       },
     },
-    on: {
-      REMOVE: {
-        actions: removeItem,
+    {
+      services: {
+        uploadImages:
+          ({ http, photos }) =>
+          async (callback) => {
+            if (photos.length === 0) {
+              callback({ type: "IMAGES_UPLOADED", urls: [] });
+              return;
+            }
+            if (!isStringArray(photos)) {
+              try {
+                const promises = photos.map((photo) =>
+                  uploadImage(http, { file: convertImageToSend(photo) })
+                );
+                const uploadedImages = await Promise.all(promises);
+
+                const urls = uploadedImages
+                  .map((response) => response.path)
+                  .filter((path): path is string => !!path);
+
+                callback({ type: "IMAGES_UPLOADED", urls });
+                return;
+              } catch (e) {
+                console.log(e);
+              }
+            }
+            callback({ type: "ERROR" });
+          },
+
+        createInvoice:
+          ({ http, photos, groupId, items }) =>
+          async (callback) => {
+            try {
+              const invoice = await createInvoice(http, {
+                groupId,
+                images: isStringArray(photos) ? photos : [],
+                items: items.map((item) => ({
+                  price: item.price,
+                  text: item.name,
+                  assignedUsers: item.assignedUsers
+                    .filter((user) => user.checked)
+                    .map((user) => user.user.id),
+                })),
+              });
+              callback({ type: "INVOICE_CREATED", data: invoice });
+            } catch (e) {
+              callback("ERROR");
+            }
+          },
       },
-      DELETE_IMAGE: {
-        actions: deleteImage,
-      },
-    },
-  });
+    }
+  );
 }
 
 const resetMode = model.assign({
@@ -276,3 +377,16 @@ const deleteImage = model.assign(
   },
   "DELETE_IMAGE"
 );
+
+const setRemoteUrls = model.assign(
+  {
+    photos: (_, event) => {
+      return event.urls;
+    },
+  },
+  "IMAGES_UPLOADED"
+);
+
+const isStringArray = (array: ImageInfo[] | string[]): array is string[] => {
+  return array.length === 0 || typeof array[0] === "string";
+};

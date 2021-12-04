@@ -1,7 +1,7 @@
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import { EventFrom } from "xstate";
 import { createModel } from "xstate/lib/model";
-import { User } from "../../../libs";
+import { HttpClient, InvoiceResponse, User } from "../../../libs";
 
 export type UserStatus = {
   user: User;
@@ -28,6 +28,7 @@ export const settlementModel = createModel(
     orginalItem: undefined as Item | undefined,
     additionalWindowOpen: false,
     groupId: 0,
+    http: new HttpClient(""),
   },
   {
     events: {
@@ -44,6 +45,9 @@ export const settlementModel = createModel(
       USERS_ASSIGNED: (users: UserStatus[]) => ({ users }),
       DELETE_IMAGE: (index: number) => ({ index }),
       SUBMIT: () => ({}),
+      IMAGES_UPLOADED: (urls: string[]) => ({ urls }),
+      ERROR: () => ({}),
+      INVOICE_CREATED: (data: InvoiceResponse) => ({data})
     },
   }
 );
