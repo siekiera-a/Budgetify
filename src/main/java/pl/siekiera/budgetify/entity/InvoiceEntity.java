@@ -47,10 +47,10 @@ public class InvoiceEntity {
     @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
     List<InvoiceItemEntity> items = new ArrayList<>();
 
-    @OneToMany(mappedBy = "invoice", orphanRemoval = true)
+    @OneToMany(mappedBy = "invoice", orphanRemoval = true, cascade = {CascadeType.ALL})
     Set<PhotoEntity> photos = new HashSet<>();
 
-    @OneToMany(mappedBy = "invoice")
+    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
     Set<PaymentEntity> payments = new HashSet<>();
 
 }

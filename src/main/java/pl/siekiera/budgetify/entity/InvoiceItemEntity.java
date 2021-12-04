@@ -35,9 +35,10 @@ public class InvoiceItemEntity {
 
     double price;
 
-    public InvoiceItemEntity(InvoiceItem item) {
+    public InvoiceItemEntity(InvoiceItem item, InvoiceEntity invoice) {
         name = item.getText();
         price = item.getPrice();
+        this.invoice = invoice;
     }
 
 }

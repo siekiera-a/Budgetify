@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,7 +37,7 @@ public class PaymentEntity {
 
     double price;
 
-    @OneToMany(mappedBy = "payment", orphanRemoval = true)
+    @OneToMany(mappedBy = "payment", orphanRemoval = true, cascade = {CascadeType.ALL})
     Set<PaymentHistoryEntity> paymentHistory = new HashSet<>();
 
 }
