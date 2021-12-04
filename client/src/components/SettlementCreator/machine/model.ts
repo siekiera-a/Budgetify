@@ -29,6 +29,7 @@ export const settlementModel = createModel(
     additionalWindowOpen: false,
     groupId: 0,
     http: new HttpClient(""),
+    name: undefined as string | undefined,
   },
   {
     events: {
@@ -44,10 +45,10 @@ export const settlementModel = createModel(
       EDIT: (index: number) => ({ index }),
       USERS_ASSIGNED: (users: UserStatus[]) => ({ users }),
       DELETE_IMAGE: (index: number) => ({ index }),
-      SUBMIT: () => ({}),
+      SUBMIT: (name: string | undefined) => ({ name }),
       IMAGES_UPLOADED: (urls: string[]) => ({ urls }),
       ERROR: () => ({}),
-      INVOICE_CREATED: (data: InvoiceResponse) => ({data})
+      INVOICE_CREATED: (data: InvoiceResponse) => ({ data }),
     },
   }
 );

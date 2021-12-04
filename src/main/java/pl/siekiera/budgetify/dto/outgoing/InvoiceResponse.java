@@ -20,6 +20,7 @@ public class InvoiceResponse {
     LocalDateTime creationTime;
     List<InvoiceItem> items;
     List<String> images;
+    String name;
 
     public InvoiceResponse(InvoiceEntity invoice) {
         id = invoice.getId();
@@ -31,6 +32,7 @@ public class InvoiceResponse {
             .collect(Collectors.toUnmodifiableList());
         images = invoice.getPhotos().stream()
             .map(PhotoEntity::getPath).collect(Collectors.toList());
+        name = invoice.getName();
     }
 
 }

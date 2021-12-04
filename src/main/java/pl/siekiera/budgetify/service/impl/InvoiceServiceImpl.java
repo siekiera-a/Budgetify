@@ -66,6 +66,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             .collect(Collectors.toUnmodifiableList());
 
         invoiceEntity.setItems(invoiceItems);
+        invoiceEntity.setName(invoice.getName());
 
         Map<UserEntity, Double> payments = paymentService.calculatePayments(invoice.getItems());
 

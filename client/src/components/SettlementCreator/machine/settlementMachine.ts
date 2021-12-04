@@ -47,6 +47,7 @@ export function createSettlementMachine({
             },
             SUBMIT: {
               target: "save",
+              actions: setName,
             },
           },
         },
@@ -193,7 +194,7 @@ export function createSettlementMachine({
           },
 
         createInvoice:
-          ({ http, photos, groupId, items }) =>
+          ({ http, photos, groupId, items, name }) =>
           async (callback) => {
             try {
               const invoice = await createInvoice(http, {
@@ -206,6 +207,7 @@ export function createSettlementMachine({
                     .filter((user) => user.checked)
                     .map((user) => user.user.id),
                 })),
+                name,
               });
               callback({ type: "INVOICE_CREATED", data: invoice });
             } catch (e) {
@@ -390,3 +392,10 @@ const setRemoteUrls = model.assign(
 const isStringArray = (array: ImageInfo[] | string[]): array is string[] => {
   return array.length === 0 || typeof array[0] === "string";
 };
+
+const setName = model.assign(
+  {
+    name: (_, event) => event.name,
+  },
+  "SUBMIT"
+);

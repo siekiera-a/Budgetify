@@ -18,6 +18,8 @@ public class CreateInvoiceRequest {
     @NotNull
     Set<String> images;
 
+    String name;
+
     @NotEmpty
     List<@Valid InvoiceItemRequest> items;
 

@@ -10,6 +10,7 @@ import {
   Portal,
   Subheading,
   Surface,
+  TextInput,
 } from "react-native-paper";
 import { useHttp, useSettings } from "../../contexts";
 import { SafeAreaView, Stack } from "../../ui";
@@ -37,6 +38,7 @@ export function SettlementCreator({ route }: Props) {
   );
 
   const assignedUsersRef = useRef([] as UserStatus[]);
+  const invoiceNameRef = useRef("");
 
   const {
     mode,
@@ -86,8 +88,9 @@ export function SettlementCreator({ route }: Props) {
   }, [send]);
 
   const onSubmit = useCallback(() => {
-    send("SUBMIT");
-  }, [send]);
+    const name = invoiceNameRef.current.trim();
+    send({ type: "SUBMIT", name: name.length > 0 ? name : undefined });
+  }, [send, invoiceNameRef]);
 
   const hideWindow = useCallback(() => {
     send("HIDE_WINDOW");
@@ -101,14 +104,24 @@ export function SettlementCreator({ route }: Props) {
         <ImageZone onZonePress={onZonePress} photos={photos} send={send} />
 
         <Surface style={styles.bar}>
-          <View style={styles.addBar}>
-            <Subheading>{dictionary.items}</Subheading>
-            <IconButton
-              icon="plus"
-              size={20}
-              onPress={addItem}
-              disabled={editing}
-            />
+          <View>
+            <View style={styles.textInputWrapper}>
+              <TextInput
+                mode="outlined"
+                label={dictionary.name}
+                style={styles.textInput}
+                onChangeText={(text) => (invoiceNameRef.current = text)}
+              />
+            </View>
+            <View style={styles.addBar}>
+              <Subheading>{dictionary.items}</Subheading>
+              <IconButton
+                icon="plus"
+                size={20}
+                onPress={addItem}
+                disabled={editing}
+              />
+            </View>
           </View>
         </Surface>
 
@@ -173,5 +186,11 @@ const styles = StyleSheet.create({
   bar: {
     padding: 8,
     borderRadius: 8,
+  },
+  textInputWrapper: {
+    marginBottom: 8,
+  },
+  textInput: {
+    height: 40,
   },
 });

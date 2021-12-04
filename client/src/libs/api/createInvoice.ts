@@ -16,6 +16,7 @@ export type InvoceItem = InvoiceItemBase & {
 export type InvoiceRequest = {
   groupId: number;
   images: string[];
+  name?: string;
   items: InvoiceItemRequest[];
 };
 
@@ -26,6 +27,7 @@ export type InvoiceResponse = {
   creationTime: string;
   items: InvoceItem[];
   images: string[];
+  name: string | null;
 };
 
 export async function createInvoice(http: HttpClient, data: InvoiceRequest) {
