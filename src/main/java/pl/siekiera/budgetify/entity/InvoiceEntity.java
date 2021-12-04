@@ -44,6 +44,8 @@ public class InvoiceEntity {
     @ManyToOne(optional = false)
     GroupEntity group;
 
+    String name;
+
     @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
     List<InvoiceItemEntity> items = new ArrayList<>();
 
