@@ -30,7 +30,7 @@ export const Items = React.memo(function Items({
   );
 
   if (items.length === 0) {
-    return null;
+    return <View style={styles.container} />;
   }
 
   return (

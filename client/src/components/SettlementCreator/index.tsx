@@ -131,7 +131,11 @@ export function SettlementCreator({ route }: Props) {
 
         <Items send={send} items={items} disableEditing={editing} />
 
-        <Button onPress={onSubmit} disabled={editing} mode="contained">
+        <Button
+          onPress={onSubmit}
+          disabled={editing || items.length === 0}
+          mode="contained"
+        >
           {dictionary.create}
         </Button>
       </Stack>
