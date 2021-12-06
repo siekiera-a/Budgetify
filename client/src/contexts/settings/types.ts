@@ -1,4 +1,5 @@
 import { Theme as NavigationTheme } from "@react-navigation/native";
+import { PaymentStatus } from "../../libs";
 
 export type Language = "PL";
 
@@ -12,12 +13,15 @@ export type Colors = Pick<NavigationTheme, "colors"> &
   Pick<ReactNativePaper.Theme, "colors"> & {
     colors: {
       touchableHighlight: string;
+      green: string;
+      yellow: string;
     };
   };
 
 export type Theme = Omit<ReactNativePaper.Theme, "colors"> & Colors;
 
 export type StringId =
+  | PaymentStatus
   | "emailLabel"
   | "passwordLabel"
   | "nameLabel"
@@ -55,4 +59,8 @@ export type StringId =
   | "cancel"
   | "name"
   | "save"
-  | "addInvoice";
+  | "addInvoice"
+  | "toPay"
+  | "toReturn"
+  | "totalPrice"
+  | "status";

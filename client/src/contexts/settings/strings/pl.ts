@@ -41,6 +41,15 @@ const strings: Dictionary = {
   name: "Nazwa",
   save: "Zapisz",
   addInvoice: "Dodaj paragon",
+  toPay: "Do zapłaty",
+  toReturn: "Do zwrotu",
+  totalPrice: "Całkowita kwota",
+  status: "Status",
+  OPENED: "Do zapłaty",
+  CLOSED: "Opłacone",
+  PENDING: "W rozliczeniu",
+  REJECTED: "Odrzucone",
+  REOPENED: "Do ponownej zapłaty",
 };
 
 export default strings;

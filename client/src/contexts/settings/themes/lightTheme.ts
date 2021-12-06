@@ -7,6 +7,8 @@ export const lightTheme: Theme = {
   colors: {
     ...PaperLightTheme.colors,
     ...NavigationLightTheme.colors,
-    touchableHighlight: "#ddd"
+    touchableHighlight: "#ddd",
+    green: "#00BA10",
+    yellow: "#F5D207",
   },
 };

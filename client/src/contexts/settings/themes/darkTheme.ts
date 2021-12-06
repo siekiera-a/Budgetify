@@ -1,16 +1,14 @@
 import { DarkTheme as PaperDarkTheme } from "react-native-paper";
-import {
-  DarkTheme as NavigationDarkTheme,
-} from "@react-navigation/native";
+import { DarkTheme as NavigationDarkTheme } from "@react-navigation/native";
 import { Theme } from "../types";
-
-
 
 export const darkTheme: Theme = {
   ...PaperDarkTheme,
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
-    touchableHighlight: "#222"
+    touchableHighlight: "#222",
+    green: "#00BA10",
+    yellow: "#F5D207",
   },
 };
