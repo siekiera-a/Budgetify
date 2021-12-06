@@ -46,6 +46,8 @@ public class InvoiceEntity {
 
     String name;
 
+    boolean settled;
+
     @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
     List<InvoiceItemEntity> items = new ArrayList<>();
 

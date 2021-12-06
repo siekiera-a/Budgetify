@@ -59,7 +59,8 @@ create table if not exists invoice
     user_id bigint not null
     constraint fknodb0rxacwyfur2jn8fv9df3t
     references p_user,
-    name text
+    name text,
+    settled boolean
 );
 
 alter table invoice owner to postgres;
