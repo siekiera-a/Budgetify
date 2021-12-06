@@ -1,6 +1,10 @@
 package pl.siekiera.budgetify.dto.outgoing;
 
-import lombok.Value;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 import pl.siekiera.budgetify.entity.GroupEntity;
 import pl.siekiera.budgetify.model.User;
 
@@ -8,7 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Value
+@Getter
+@ToString
+@EqualsAndHashCode
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class GroupResponse {
 
     long id;

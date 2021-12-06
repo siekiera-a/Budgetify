@@ -7,6 +7,7 @@ import pl.siekiera.budgetify.entity.GroupEntity;
 import pl.siekiera.budgetify.entity.UserEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
 
@@ -17,5 +18,9 @@ public interface GroupRepository extends JpaRepository<GroupEntity, Long> {
     @Query("select g from GroupEntity g join GroupMemberEntity ge on ge.group = g where ge" +
         ".user=:user")
     List<GroupEntity> findAll(@Param("user") UserEntity user);
+
+    @Query("select g from GroupEntity g where g.id = :id and :user in (select gm.user from " +
+        "GroupMemberEntity gm where gm.group = g)")
+    Optional<GroupEntity> findUserGroupById(@Param("id") long id, @Param("user") UserEntity user);
 
 }

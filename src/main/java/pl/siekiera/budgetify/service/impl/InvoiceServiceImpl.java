@@ -13,12 +13,16 @@ import pl.siekiera.budgetify.entity.PhotoEntity;
 import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.exception.GroupNotFoundException;
 import pl.siekiera.budgetify.exception.IllegalActionException;
+import pl.siekiera.budgetify.model.AbstractGroupInvoice;
+import pl.siekiera.budgetify.model.InvoiceToPay;
+import pl.siekiera.budgetify.model.InvoiceToSettlement;
 import pl.siekiera.budgetify.model.Payment;
 import pl.siekiera.budgetify.repository.GroupRepository;
 import pl.siekiera.budgetify.repository.InvoiceRepository;
 import pl.siekiera.budgetify.service.InvoiceService;
 import pl.siekiera.budgetify.service.PaymentService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -72,12 +76,51 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         Set<PaymentEntity> paymentsEntities = payments.entrySet().stream().map(entry -> {
             Payment payment = new Payment(invoiceEntity, entry.getKey(), entry.getValue());
-            return paymentService.createNewPayment(payment);
+            return paymentService.createNewPayment(payment, issuer);
         }).collect(Collectors.toUnmodifiableSet());
 
         invoiceEntity.setPayments(paymentsEntities);
 
         return invoiceRepository.save(invoiceEntity);
+    }
+
+    @Override
+    public List<AbstractGroupInvoice> getPaymentsInGroup(UserEntity user, GroupEntity group) {
+        var invoices = new ArrayList<AbstractGroupInvoice>();
+        var groupInvoices = invoiceRepository.findInvoicesInGroup(group);
+        var userId = user.getId();
+
+        groupInvoices.stream()
+            .filter(invoice -> !invoice.isSettled() && invoice.getUser().getId() == userId)
+            .map(invoice -> {
+                var totalPrice = getTotalPrice(invoice);
+                var payments = paymentService.getPayments(invoice);
+                var settlement = paymentService.getSettlement(payments, totalPrice);
+                return new InvoiceToSettlement(invoice, settlement);
+            })
+            .forEach(invoices::add);
+
+        groupInvoices.stream()
+            .filter(invoice -> !invoice.isSettled() && invoice.getUser().getId() != userId)
+            .map(invoice -> {
+                var userPayment = paymentService.getPayments(invoice).stream()
+                    .filter(payment -> payment.getAssignee().getId() == userId)
+                    .findFirst();
+
+                var invoiceWrapper = userPayment.map(payment -> new InvoiceToPay(invoice,
+                    payment.getPrice(),
+                    payment.getStatus()));
+                return invoiceWrapper.orElseGet(() -> new InvoiceToPay(invoice, 0, null));
+            })
+            .forEach(invoices::add);
+
+        return invoices;
+    }
+
+    public double getTotalPrice(InvoiceEntity invoice) {
+        return invoice.getItems().stream()
+            .mapToDouble(InvoiceItemEntity::getPrice)
+            .sum();
     }
 
 }
