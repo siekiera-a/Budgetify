@@ -1,3 +1,5 @@
+import { useNavigation } from "@react-navigation/core";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -7,9 +9,10 @@ import {
   formatDate,
   formatPrice,
   InvoiceToPay,
-  InvoiceToSettlement
+  InvoiceToSettlement,
 } from "../../libs";
 import { Stack } from "../../ui";
+import { StackNavigationParamList } from "../navigation/types";
 import { InvoicePaymentStatus } from "./InvoicePaymentStatus";
 
 type Props = {
@@ -23,12 +26,14 @@ const isInvoiceToPay = (
 export function InvoiceItem({ item }: Props) {
   const { dictionary, theme } = useSettings();
   const invoiceToPay = isInvoiceToPay(item);
+  const { push } =
+    useNavigation<StackNavigationProp<StackNavigationParamList>>();
   const styles = makeStyles(theme.colors.primary, theme.colors.text);
 
   const { id, name, creationTime, totalPrice } = item;
 
   const showInvoice = useCallback(() => {
-    console.log(id);
+    push("InvoiceView", { id });
   }, [id]);
 
   return (

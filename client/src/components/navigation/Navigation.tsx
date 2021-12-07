@@ -5,6 +5,7 @@ import { useHttp, useSettings } from "../../contexts";
 import { LoginView } from "../authentication/LoginView";
 import { RegisterView } from "../authentication/RegisterView";
 import { GroupCreator } from "../Groups/Creator/GroupCreator";
+import { InvoiceView } from "../Invoice";
 import { SettlementCreator } from "../SettlementCreator";
 import { BottomTabs } from "./BottomTabs";
 import {
@@ -37,6 +38,15 @@ export function Navigation() {
               headerShown: true,
               headerTitleAlign: "center",
               title: dictionary.addInvoice,
+            }}
+          />
+          <Stack.Screen
+            name="InvoiceView"
+            component={InvoiceView}
+            options={{
+              headerShown: true,
+              headerTitleAlign: "center",
+              title: dictionary.settlement,
             }}
           />
         </Stack.Navigator>

@@ -19,4 +19,7 @@ export type StackNavigationParamList = {
     users: User[];
     groupId: number;
   };
+  InvoiceView: {
+    id: number;
+  };
 };

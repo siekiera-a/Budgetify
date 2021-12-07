@@ -63,4 +63,7 @@ export type StringId =
   | "toPay"
   | "toReturn"
   | "totalPrice"
-  | "status";
+  | "status"
+  | "settlement"
+  | "addedBy"
+  | "assignedToGroup";
