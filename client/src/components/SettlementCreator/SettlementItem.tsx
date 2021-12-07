@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { StyleSheet, View } from "react-native";
-import { IconButton, Subheading, Text } from "react-native-paper";
+import { IconButton, Subheading } from "react-native-paper";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { formatPrice } from "../../libs";
 import { AvatarGroup, Stack } from "../../ui";
 import { Item } from "./machine/model";
 
@@ -28,7 +29,7 @@ export function SettlementItem({
     <Stack space={5}>
       <View style={styles.row}>
         <Subheading>{name}</Subheading>
-        <Subheading>{price} zł</Subheading>
+        <Subheading>{formatPrice(price)} zł</Subheading>
       </View>
       <View style={[styles.row, styles.alignedVeritcally]}>
         <AvatarGroup
