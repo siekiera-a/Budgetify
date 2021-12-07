@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import pl.siekiera.budgetify.entity.GroupEntity;
 import pl.siekiera.budgetify.entity.InvoiceEntity;
 
+import java.util.Optional;
 import java.util.Set;
 
 public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
@@ -14,5 +15,8 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
         " fetch i.user where i.group = " +
         ":group")
     Set<InvoiceEntity> findInvoicesInGroup(@Param("group") GroupEntity group);
+
+    @Query("select i from InvoiceEntity i join fetch i.group join fetch i.user join fetch i.items where i.id = :id")
+    Optional<InvoiceEntity> getInvoiceById(@Param("id") long id);
 
 }

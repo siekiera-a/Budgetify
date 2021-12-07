@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import pl.siekiera.budgetify.dto.incoming.CreateInvoiceRequest;
+import pl.siekiera.budgetify.dto.outgoing.InvoiceResponse;
 import pl.siekiera.budgetify.entity.GroupEntity;
 import pl.siekiera.budgetify.entity.InvoiceEntity;
 import pl.siekiera.budgetify.entity.InvoiceItemEntity;
@@ -117,10 +118,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoices;
     }
 
+    @Override
     public double getTotalPrice(InvoiceEntity invoice) {
         return invoice.getItems().stream()
             .mapToDouble(InvoiceItemEntity::getPrice)
             .sum();
     }
 
+    @Override
+    public Optional<InvoiceResponse> getInvoice(long id) {
+        return invoiceRepository.getInvoiceById(id)
+            .map(invoice ->
+                new InvoiceResponse(invoice, getTotalPrice(invoice))
+            );
+    }
 }

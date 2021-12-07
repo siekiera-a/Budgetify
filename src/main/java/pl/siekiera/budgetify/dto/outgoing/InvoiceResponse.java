@@ -21,8 +21,10 @@ public class InvoiceResponse {
     List<InvoiceItem> items;
     List<String> images;
     String name;
+    boolean settled;
+    double totalPrice;
 
-    public InvoiceResponse(InvoiceEntity invoice) {
+    public InvoiceResponse(InvoiceEntity invoice, double totalPrice) {
         id = invoice.getId();
         issuer = new User(invoice.getUser());
         group = new Group(invoice.getGroup());
@@ -33,6 +35,8 @@ public class InvoiceResponse {
         images = invoice.getPhotos().stream()
             .map(PhotoEntity::getPath).collect(Collectors.toList());
         name = invoice.getName();
+        settled = invoice.isSettled();
+        this.totalPrice = totalPrice;
     }
 
 }
