@@ -42,7 +42,7 @@ export function Stack({
             {child}
             {space > 0 && <View style={{ width: space, height: space }} />}
             {withSeparator && (
-              <Divider style={{ backgroundColor: separatorColor }} />
+              <Divider style={{ backgroundColor: separatorColor, height: 1 }} />
             )}
           </React.Fragment>
         );
