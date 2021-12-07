@@ -66,9 +66,9 @@ public class InvoiceServiceImpl implements InvoiceService {
             return entity;
         }).collect(Collectors.toSet()));
 
-        List<InvoiceItemEntity> invoiceItems = invoice.getItems().stream()
+        Set<InvoiceItemEntity> invoiceItems = invoice.getItems().stream()
             .map(item -> new InvoiceItemEntity(item, invoiceEntity))
-            .collect(Collectors.toUnmodifiableList());
+            .collect(Collectors.toUnmodifiableSet());
 
         invoiceEntity.setItems(invoiceItems);
         invoiceEntity.setName(invoice.getName());

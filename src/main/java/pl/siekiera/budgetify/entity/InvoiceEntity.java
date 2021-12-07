@@ -17,9 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,7 +47,7 @@ public class InvoiceEntity {
     boolean settled;
 
     @OneToMany(mappedBy = "invoice", cascade = {CascadeType.ALL})
-    List<InvoiceItemEntity> items = new ArrayList<>();
+    Set<InvoiceItemEntity> items = new HashSet<>();
 
     @OneToMany(mappedBy = "invoice", orphanRemoval = true, cascade = {CascadeType.ALL})
     Set<PhotoEntity> photos = new HashSet<>();
