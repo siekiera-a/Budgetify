@@ -7,5 +7,6 @@ export { revokeToken } from "./revokeToken";
 export { uploadImage } from "./uploadImage";
 export * from "./createInvoice";
 export * from "./getGroupDetails";
+export * from "./getInvoice";
 
 export * from "./types";

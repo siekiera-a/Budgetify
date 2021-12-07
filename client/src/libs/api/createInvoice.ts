@@ -28,6 +28,8 @@ export type InvoiceResponse = {
   items: InvoceItem[];
   images: string[];
   name: string | null;
+  settled: boolean;
+  totalPrice: number;
 };
 
 export async function createInvoice(http: HttpClient, data: InvoiceRequest) {
