@@ -87,7 +87,7 @@ export function SettlementItemEditor({
               control={control}
               rules={{
                 pattern: {
-                  value: /^\d+([\\.,]\d+)?$/,
+                  value: /^\d+([\\.,]\d{1,2})?$/,
                   message: "invalid number",
                 },
                 required: true,
