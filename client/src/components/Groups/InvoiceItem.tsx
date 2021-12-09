@@ -11,7 +11,7 @@ import {
   InvoiceToPay,
   InvoiceToSettlement,
 } from "../../libs";
-import { Stack } from "../../ui";
+import { Chip, Stack } from "../../ui";
 import { StackNavigationParamList } from "../navigation/types";
 import { InvoicePaymentStatus } from "./InvoicePaymentStatus";
 
@@ -24,11 +24,10 @@ const isInvoiceToPay = (
 ): item is InvoiceToPay => "status" in item;
 
 export function InvoiceItem({ item }: Props) {
-  const { dictionary, theme } = useSettings();
+  const { dictionary } = useSettings();
   const invoiceToPay = isInvoiceToPay(item);
   const { push } =
     useNavigation<StackNavigationProp<StackNavigationParamList>>();
-  const styles = makeStyles(theme.colors.primary, theme.colors.text);
 
   const { id, name, creationTime, totalPrice } = item;
 
@@ -54,11 +53,10 @@ export function InvoiceItem({ item }: Props) {
               <View style={styles.paymentDetails}>
                 <Text style={styles.price}>{formatPrice(totalPrice)} zł</Text>
                 {invoiceToPay && item.status && (
-                  <View style={styles.status}>
-                    <Text style={styles.statusText}>
-                      {dictionary[item.status]}
-                    </Text>
-                  </View>
+                  <Chip
+                    text={dictionary[item.status]}
+                    style={styles.marginLeft}
+                  />
                 )}
               </View>
             </View>
@@ -76,40 +74,30 @@ export function InvoiceItem({ item }: Props) {
   );
 }
 
-const makeStyles = (statusBackground: string, statusTextColor: string) =>
-  StyleSheet.create({
-    container: {
-      borderRadius: 8,
-      padding: 8,
-    },
-    row: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
-    date: {
-      fontStyle: "italic",
-    },
-    title: {
-      fontSize: 17,
-    },
-    price: {
-      fontWeight: "bold",
-    },
-    status: {
-      fontStyle: "italic",
-      marginLeft: 8,
-      paddingHorizontal: 6,
-      paddingVertical: 3,
-      borderRadius: 50,
-      backgroundColor: statusBackground,
-    },
-    statusText: {
-      fontSize: 10,
-      color: statusTextColor,
-    },
-    paymentDetails: {
-      flexDirection: "row",
-      alignItems: "center",
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 8,
+    padding: 8,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  date: {
+    fontStyle: "italic",
+  },
+  title: {
+    fontSize: 17,
+  },
+  price: {
+    fontWeight: "bold",
+  },
+  paymentDetails: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  marginLeft: {
+    marginLeft: 8,
+  },
+});

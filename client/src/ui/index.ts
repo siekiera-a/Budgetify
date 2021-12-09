@@ -6,3 +6,4 @@ export { AvatarComponent as Avatar } from "./Avatar";
 export { EditImage } from "./EditImage";
 export { BottomAction } from "./BottomAction";
 export { AvatarGroup } from "./AvatarGroup";
+export { Chip } from "./Chip";
