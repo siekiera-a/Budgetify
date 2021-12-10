@@ -24,4 +24,8 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
         ".invoice.user <> :user")
     Set<PaymentEntity> findUserReceivables(@Param("user") UserEntity user);
 
+    @Query("select p from PaymentEntity p join fetch p.invoice i join fetch p.user join fetch i" +
+        ".group join fetch p.paymentHistory ph join fetch ph.status where i.user = :user and p.user <> :user")
+    Set<PaymentEntity> findPaymentForSettlement(@Param("user") UserEntity user);
+
 }

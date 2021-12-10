@@ -29,4 +29,6 @@ public interface PaymentService {
 
     List<PaymentResponse> getReceivables(UserEntity user, PaymentStatusEnumEntity status);
 
+    List<PaymentResponse> getPaymentsForSettlement(UserEntity user);
+
 }

@@ -169,4 +169,18 @@ public class PaymentServiceImp implements PaymentService {
             )
             .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PaymentResponse> getPaymentsForSettlement(UserEntity user) {
+        return paymentRepository.findPaymentForSettlement(user).stream()
+            .filter(payment ->
+                PaymentStatusEnumEntity.PENDING.equals(getPaymentStatus(payment).getStatus().getName())
+            )
+            .map(payment ->
+                new PaymentResponse(payment.getId(), payment.getPrice(),
+                    PaymentStatusEnumEntity.PENDING, payment.getInvoice(), payment.getUser())
+            )
+            .collect(Collectors.toList());
+    }
+
 }

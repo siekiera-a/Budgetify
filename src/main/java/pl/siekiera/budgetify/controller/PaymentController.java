@@ -32,4 +32,10 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.getReceivables(me, status));
     }
 
+    @GetMapping("/forSettlement")
+    public ResponseEntity<List<PaymentResponse>> getPaymentsForSettlement(Authentication authentication) {
+        var me = (UserEntity) authentication.getPrincipal();
+        return ResponseEntity.ok(paymentService.getPaymentsForSettlement(me));
+    }
+
 }

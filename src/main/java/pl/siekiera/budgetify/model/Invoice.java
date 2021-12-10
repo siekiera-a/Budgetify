@@ -2,6 +2,7 @@ package pl.siekiera.budgetify.model;
 
 import lombok.Value;
 import pl.siekiera.budgetify.entity.InvoiceEntity;
+import pl.siekiera.budgetify.entity.UserEntity;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,14 @@ public class Invoice {
         group = new Group(invoice.getGroup());
         name = invoice.getName();
         creationTime = invoice.getAddTime();
+    }
+
+    public Invoice(InvoiceEntity invoice, UserEntity issuer) {
+        id = invoice.getId();
+        group = new Group(invoice.getGroup());
+        name = invoice.getName();
+        creationTime = invoice.getAddTime();
+        this.issuer = new UserWithConfidential(issuer);
     }
 
 }
