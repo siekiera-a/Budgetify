@@ -53,6 +53,14 @@ const strings: Dictionary = {
   settlement: "Rozliczenie",
   addedBy: "Dodane przez",
   assignedToGroup: "Przypisane do grupy",
+  forSettlement: "Do rozliczenia",
+  receivables: "Należności",
+  filter: "Filtruj",
+  confirm: "Zatwierdź",
+  reject: "Odrzuć",
+  bankAccountNumber: "Numer konta bankowego",
+  phoneNumber: "Numer telefonu",
+  noConfidentialsProvided: "Nie podano danych do rozliczenia",
 };
 
 export default strings;

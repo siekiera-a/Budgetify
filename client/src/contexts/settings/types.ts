@@ -66,4 +66,12 @@ export type StringId =
   | "status"
   | "settlement"
   | "addedBy"
-  | "assignedToGroup";
+  | "assignedToGroup"
+  | "forSettlement"
+  | "receivables"
+  | "filter"
+  | "confirm"
+  | "reject"
+  | "bankAccountNumber"
+  | "phoneNumber"
+  | "noConfidentialsProvided";

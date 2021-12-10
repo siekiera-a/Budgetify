@@ -1,10 +1,17 @@
 import { GroupBase, PaymentStatus, User } from ".";
 import { HttpClient } from "..";
 
+export type UserWithConfidential = User & {
+  bankAccount: string | null;
+  blikNumber: string | null;
+};
+
 export type Invoice = {
   id: number;
-  issuer: User;
+  issuer: UserWithConfidential;
   group: GroupBase;
+  name: string;
+  creationTime: string;
 };
 
 export type PaymentResponse = {

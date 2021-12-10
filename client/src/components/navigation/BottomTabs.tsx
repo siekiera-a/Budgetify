@@ -5,6 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useSettings } from "../../contexts";
 import { View } from "../../ui/View";
 import { GroupsTab } from "../Groups/GroupsTab";
+import { Payments } from "../Payments";
 import { Settings } from "../Settings";
 import { TabNavigationParamList } from "./types";
 
@@ -38,7 +39,7 @@ export function BottomTabs() {
       />
       <Tab.Screen
         name="Payments"
-        component={Component}
+        component={Payments}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="wallet" color={color} size={size} />
