@@ -2,6 +2,7 @@ package pl.siekiera.budgetify.service.impl;
 
 import org.springframework.stereotype.Service;
 import pl.siekiera.budgetify.dto.incoming.InvoiceItemRequest;
+import pl.siekiera.budgetify.dto.outgoing.PaymentResponse;
 import pl.siekiera.budgetify.entity.InvoiceEntity;
 import pl.siekiera.budgetify.entity.PaymentEntity;
 import pl.siekiera.budgetify.entity.PaymentHistoryEntity;
@@ -89,14 +90,18 @@ public class PaymentServiceImp implements PaymentService {
     public List<PaymentWithStatus> getPayments(InvoiceEntity invoice) {
         return paymentRepository.findInvoicePayments(invoice).stream()
             .map(payment -> {
-                var status = payment.getPaymentHistory().stream()
-                    .max(Comparator.comparing(PaymentHistoryEntity::getTime))
-                    .orElseThrow(() -> new IllegalStateException(String.format("Payment with id =" +
-                        " %d without history!", payment.getId())));
+                var status = getPaymentStatus(payment);
                 return new PaymentWithStatus(payment.getId(), payment.getPrice(),
                     status.getStatus().getName(), payment.getUser());
             })
             .collect(Collectors.toUnmodifiableList());
+    }
+
+    private PaymentHistoryEntity getPaymentStatus(PaymentEntity payment) {
+        return payment.getPaymentHistory().stream()
+            .max(Comparator.comparing(PaymentHistoryEntity::getTime))
+            .orElseThrow(() -> new IllegalStateException(String.format("Payment with id =" +
+                " %d without history!", payment.getId())));
     }
 
     @Override
@@ -150,5 +155,19 @@ public class PaymentServiceImp implements PaymentService {
             .sum();
 
         return new UserPaymentsSummary(toPay, toReturn);
+    }
+
+    @Override
+    public List<PaymentResponse> getReceivables(UserEntity user, PaymentStatusEnumEntity status) {
+        return paymentRepository.findUserReceivables(user).stream()
+            .filter(payment -> {
+                var paymentStatus = getPaymentStatus(payment);
+                return status.equals(paymentStatus.getStatus().getName());
+            })
+            .map(payment ->
+                new PaymentResponse(payment.getId(), payment.getPrice(), status,
+                    payment.getInvoice())
+            )
+            .collect(Collectors.toList());
     }
 }

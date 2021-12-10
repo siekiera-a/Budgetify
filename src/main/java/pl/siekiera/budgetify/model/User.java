@@ -1,9 +1,18 @@
 package pl.siekiera.budgetify.model;
 
-import lombok.Value;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 import pl.siekiera.budgetify.entity.UserEntity;
 
-@Value
+@Getter
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class User {
 
     long id;
