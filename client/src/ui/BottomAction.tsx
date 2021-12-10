@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
+  Keyboard,
   LayoutChangeEvent,
   StyleSheet,
   View,
@@ -45,6 +46,12 @@ export function BottomAction({
       useNativeDriver: true,
       easing: Easing.linear,
     }).start();
+  }, [visible]);
+
+  useEffect(() => {
+    if (visible) {
+      Keyboard.dismiss();
+    }
   }, [visible]);
 
   const onLayout = useCallback(
