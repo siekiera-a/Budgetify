@@ -9,5 +9,6 @@ export * from "./createInvoice";
 export * from "./getGroupDetails";
 export * from "./getInvoice";
 export * from "./getReceivables";
+export { getPaymentsForSettlement } from "./getPaymentsForSettlement";
 
 export * from "./types";
