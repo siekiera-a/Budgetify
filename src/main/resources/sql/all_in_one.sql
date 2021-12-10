@@ -148,7 +148,7 @@ create table if not exists token
 
 alter table token owner to postgres;
 
-insert into payment_status (name) values ('OPENED'), ('CLOSED'), ('PENDING'), ('REJECTED'), ('REOPENED');
+insert into payment_status (name) values ('OPENED'), ('CLOSED'), ('PENDING'), ('REJECTED');
 
 insert into public.p_user (avatar, bank_account, blik_number, email, name, password, registration_time)
 values  ('https://www.theplace2.ru/cache/archive/juli_annee/img/1118full_juli_annee-gthumb-gwdata1200-ghdata1200-gfitdatamax.jpg', '84969258330572003898101278', '677053789', 'ania@op.pl', 'Ania', '$2a$10$O4/IEGxrDIXSpIyIvgtezu7NHd97cENwgvfsCpfPFWSLOg1ldxcxC', '2021-10-08 00:17:41.163354'),

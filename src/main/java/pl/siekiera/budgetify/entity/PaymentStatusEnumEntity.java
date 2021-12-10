@@ -5,5 +5,4 @@ public enum PaymentStatusEnumEntity {
     CLOSED,
     PENDING,
     REJECTED,
-    REOPENED
 }

@@ -34,7 +34,6 @@ export function Receivables() {
         { value: "PENDING", label: dictionary.PENDING },
         { value: "CLOSED", label: dictionary.CLOSED },
         { value: "REJECTED", label: dictionary.REJECTED },
-        { value: "REOPENED", label: dictionary.REOPENED },
       ] as Array<{ label: string; value: PaymentStatus }>,
     [dictionary]
   );

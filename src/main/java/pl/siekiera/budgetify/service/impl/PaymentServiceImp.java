@@ -124,7 +124,6 @@ public class PaymentServiceImp implements PaymentService {
                             return new InvoicePaymentSettlement(total, paid, inSettlement,
                                 price + waitForPayment);
                         case PENDING:
-                        case REOPENED:
                             return new InvoicePaymentSettlement(total, paid, inSettlement + price
                                 , waitForPayment);
                     }

@@ -49,7 +49,6 @@ const strings: Dictionary = {
   CLOSED: "Opłacone",
   PENDING: "W rozliczeniu",
   REJECTED: "Odrzucone",
-  REOPENED: "Do ponownej zapłaty",
   settlement: "Rozliczenie",
   addedBy: "Dodane przez",
   assignedToGroup: "Przypisane do grupy",

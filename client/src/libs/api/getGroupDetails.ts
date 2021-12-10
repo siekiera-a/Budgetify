@@ -8,12 +8,7 @@ export type GroupInvoiceBase = {
   totalPrice: number;
 };
 
-export type PaymentStatus =
-  | "OPENED"
-  | "CLOSED"
-  | "PENDING"
-  | "REJECTED"
-  | "REOPENED";
+export type PaymentStatus = "OPENED" | "CLOSED" | "PENDING" | "REJECTED";
 
 export type InvoiceToPay = GroupInvoiceBase & {
   status: PaymentStatus | null;
