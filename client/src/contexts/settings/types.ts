@@ -15,6 +15,7 @@ export type Colors = Pick<NavigationTheme, "colors"> &
       touchableHighlight: string;
       green: string;
       yellow: string;
+      red: string;
     };
   };
 
@@ -70,7 +71,7 @@ export type StringId =
   | "forSettlement"
   | "receivables"
   | "filter"
-  | "confirm"
+  | "accept"
   | "reject"
   | "bankAccountNumber"
   | "phoneNumber"

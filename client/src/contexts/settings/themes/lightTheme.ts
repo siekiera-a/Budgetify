@@ -10,5 +10,6 @@ export const lightTheme: Theme = {
     touchableHighlight: "#ddd",
     green: "#00BA10",
     yellow: "#F5D207",
+    red: "#E02121",
   },
 };

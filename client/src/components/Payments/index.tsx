@@ -2,6 +2,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import React from "react";
 import { StyleSheet } from "react-native";
 import { useSettings } from "../../contexts";
+import { UserWithConfidential } from "../../libs";
 import { SafeAreaView } from "../../ui";
 import { ForSettlement } from "./ForSettlement";
 import { Receivables } from "./Receivables";
@@ -12,6 +13,13 @@ type TopTabNavigation = {
 };
 
 const Tab = createMaterialTopTabNavigator<TopTabNavigation>();
+
+export type ShelfParams = {
+  visible: boolean;
+  price: number;
+  paymentId: number;
+  user?: UserWithConfidential;
+};
 
 export function Payments() {
   const { dictionary } = useSettings();

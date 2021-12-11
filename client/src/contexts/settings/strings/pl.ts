@@ -55,7 +55,7 @@ const strings: Dictionary = {
   forSettlement: "Do rozliczenia",
   receivables: "Należności",
   filter: "Filtruj",
-  confirm: "Zatwierdź",
+  accept: "Akceptuj",
   reject: "Odrzuć",
   bankAccountNumber: "Numer konta bankowego",
   phoneNumber: "Numer telefonu",

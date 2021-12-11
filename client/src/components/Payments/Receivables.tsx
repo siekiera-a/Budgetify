@@ -3,29 +3,26 @@ import React, { useCallback, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
+import { ShelfParams } from ".";
 import { useHttp, useSettings } from "../../contexts";
 import {
   getReceivables,
   PaymentResponse,
   PaymentStatus,
   payPayment,
-  UserWithConfidential,
 } from "../../libs";
 import { BottomAction, Stack } from "../../ui";
-import { PaymentItem } from "./PaymentItem";
+import { OnShowPressArgs, PaymentItem } from "./PaymentItem";
 import { UserPreview } from "./UserPreview";
 
 export function Receivables() {
   const { dictionary } = useSettings();
   const { client } = useHttp();
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [userConfidentials, setUserConfidentials] = useState<{
-    user?: UserWithConfidential;
-    paymentId: number;
-    visible: boolean;
-  }>({
+  const [userConfidentials, setUserConfidentials] = useState<ShelfParams>({
     visible: false,
     paymentId: -1,
+    price: 0,
   });
   const [payments, setPayments] = useState([] as PaymentResponse[]);
   const [status, setStatus] = useState<PaymentStatus>("OPENED");
@@ -50,12 +47,12 @@ export function Receivables() {
   }, [setFiltersOpen]);
 
   const closeAction = useCallback(() => {
-    setUserConfidentials({ visible: false, paymentId: -1 });
+    setUserConfidentials({ visible: false, paymentId: -1, price: 0 });
   }, [setUserConfidentials]);
 
   const showProfile = useCallback(
-    (user: UserWithConfidential, paymentId: number) => {
-      setUserConfidentials({ visible: true, user, paymentId });
+    ({ user, paymentId, price }: OnShowPressArgs) => {
+      setUserConfidentials({ visible: true, user, paymentId, price });
     },
     [setUserConfidentials]
   );
@@ -87,7 +84,7 @@ export function Receivables() {
 
       setUserConfidentials((confidentials) => {
         if (confidentials.visible) {
-          return { visible: false, paymentId: -1 };
+          return { visible: false, paymentId: -1, price: 0 };
         }
         return confidentials;
       });
@@ -134,7 +131,10 @@ export function Receivables() {
         </Stack>
       </ScrollView>
       <BottomAction visible={userConfidentials.visible} onDismiss={closeAction}>
-        <UserPreview user={userConfidentials.user}>
+        <UserPreview
+          user={userConfidentials.user}
+          price={userConfidentials.price}
+        >
           {(status === "OPENED" || status === "REJECTED") && (
             <View style={styles.buttonRow}>
               <Button onPress={pay} mode="contained">

@@ -5,16 +5,18 @@ import { useSettings } from "../../contexts";
 import {
   formatBankAccount,
   formatPhoneNumber,
-  UserWithConfidential
+  formatPrice,
+  UserWithConfidential,
 } from "../../libs";
 import { Avatar, Stack } from "../../ui";
 
 type Props = {
   user?: UserWithConfidential;
+  price?: number;
   children?: React.ReactNode;
 };
 
-export function UserPreview({ user, children }: Props) {
+export function UserPreview({ user, children, price }: Props) {
   const { theme, dictionary } = useSettings();
   const styles = makeStyles(theme.colors.placeholder);
 
@@ -24,10 +26,13 @@ export function UserPreview({ user, children }: Props) {
 
   return (
     <Stack space={16}>
-      <View style={styles.center}>
+      <Stack space={8} style={styles.center}>
         <Avatar avatar={user.avatar} name={user.name} size={100} />
         <Text style={styles.username}>{user.name}</Text>
-      </View>
+        {price !== undefined && (
+          <Text style={styles.price}>{formatPrice(price)} zł</Text>
+        )}
+      </Stack>
 
       {user.blikNumber || user.bankAccount ? (
         <Stack space={5}>
@@ -81,7 +86,10 @@ const makeStyles = (placeholderColor: string) =>
       justifyContent: "space-between",
     },
     username: {
-      marginTop: 12,
       fontSize: 25,
+    },
+    price: {
+      fontWeight: "bold",
+      fontSize: 20,
     },
   });

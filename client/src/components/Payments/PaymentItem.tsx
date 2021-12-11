@@ -14,8 +14,14 @@ import {
 import { Avatar, Chip, Stack } from "../../ui";
 import { StackNavigationParamList } from "../navigation/types";
 
+export type OnShowPressArgs = {
+  user: UserWithConfidential;
+  paymentId: number;
+  price: number;
+};
+
 type Props = PaymentResponse & {
-  onShowPress(user: UserWithConfidential, paymentId: number): void;
+  onShowPress(args: OnShowPressArgs): void;
 };
 
 export function PaymentItem({
@@ -36,8 +42,8 @@ export function PaymentItem({
   }, [invoice.id]);
 
   const showProfile = useCallback(() => {
-    onShowPress(invoice.issuer, id);
-  }, [onShowPress, invoice, id]);
+    onShowPress({ paymentId: id, user: invoice.issuer, price });
+  }, [onShowPress, invoice, id, price]);
 
   return (
     <Surface style={styles.container}>
