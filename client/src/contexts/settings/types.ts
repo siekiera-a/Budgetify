@@ -74,4 +74,5 @@ export type StringId =
   | "reject"
   | "bankAccountNumber"
   | "phoneNumber"
-  | "noConfidentialsProvided";
+  | "noConfidentialsProvided"
+  | "pay";

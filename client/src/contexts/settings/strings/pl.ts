@@ -60,6 +60,7 @@ const strings: Dictionary = {
   bankAccountNumber: "Numer konta bankowego",
   phoneNumber: "Numer telefonu",
   noConfidentialsProvided: "Nie podano danych do rozliczenia",
+  pay: "Zapłać",
 };
 
 export default strings;

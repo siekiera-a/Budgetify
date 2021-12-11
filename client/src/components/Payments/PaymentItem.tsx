@@ -9,16 +9,22 @@ import {
   formatDate,
   formatPrice,
   PaymentResponse,
-  UserWithConfidential
+  UserWithConfidential,
 } from "../../libs";
 import { Avatar, Chip, Stack } from "../../ui";
 import { StackNavigationParamList } from "../navigation/types";
 
 type Props = PaymentResponse & {
-  onShowPress(user: UserWithConfidential): void;
+  onShowPress(user: UserWithConfidential, paymentId: number): void;
 };
 
-export function PaymentItem({ invoice, price, status, onShowPress }: Props) {
+export function PaymentItem({
+  invoice,
+  price,
+  status,
+  onShowPress,
+  id,
+}: Props) {
   const { dictionary } = useSettings();
   const { push } =
     useNavigation<StackNavigationProp<StackNavigationParamList>>();
@@ -30,8 +36,8 @@ export function PaymentItem({ invoice, price, status, onShowPress }: Props) {
   }, [invoice.id]);
 
   const showProfile = useCallback(() => {
-    onShowPress(invoice.issuer);
-  }, [onShowPress, invoice]);
+    onShowPress(invoice.issuer, id);
+  }, [onShowPress, invoice, id]);
 
   return (
     <Surface style={styles.container}>

@@ -1,13 +1,14 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
 import { useHttp, useSettings } from "../../contexts";
 import {
   getReceivables,
   PaymentResponse,
   PaymentStatus,
+  payPayment,
   UserWithConfidential,
 } from "../../libs";
 import { BottomAction, Stack } from "../../ui";
@@ -20,9 +21,11 @@ export function Receivables() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [userConfidentials, setUserConfidentials] = useState<{
     user?: UserWithConfidential;
+    paymentId: number;
     visible: boolean;
   }>({
     visible: false,
+    paymentId: -1,
   });
   const [payments, setPayments] = useState([] as PaymentResponse[]);
   const [status, setStatus] = useState<PaymentStatus>("OPENED");
@@ -47,12 +50,12 @@ export function Receivables() {
   }, [setFiltersOpen]);
 
   const closeAction = useCallback(() => {
-    setUserConfidentials({ visible: false });
+    setUserConfidentials({ visible: false, paymentId: -1 });
   }, [setUserConfidentials]);
 
   const showProfile = useCallback(
-    (user: UserWithConfidential) => {
-      setUserConfidentials({ visible: true, user });
+    (user: UserWithConfidential, paymentId: number) => {
+      setUserConfidentials({ visible: true, user, paymentId });
     },
     [setUserConfidentials]
   );
@@ -66,6 +69,31 @@ export function Receivables() {
       asyncFunc();
     }, [status, client, setPayments])
   );
+
+  const paymentId = userConfidentials.paymentId;
+
+  const pay = useCallback(() => {
+    const asyncFunc = async () => {
+      try {
+        const response = await payPayment(client, userConfidentials.paymentId);
+        if (response.success) {
+          setPayments((payments) =>
+            payments.filter((payment) => payment.id !== paymentId)
+          );
+        }
+      } catch (e) {
+        console.log(e);
+      }
+
+      setUserConfidentials((confidentials) => {
+        if (confidentials.visible) {
+          return { visible: false, paymentId: -1 };
+        }
+        return confidentials;
+      });
+    };
+    asyncFunc();
+  }, [client, paymentId, setPayments]);
 
   return (
     <React.Fragment>
@@ -106,7 +134,15 @@ export function Receivables() {
         </Stack>
       </ScrollView>
       <BottomAction visible={userConfidentials.visible} onDismiss={closeAction}>
-        <UserPreview user={userConfidentials.user} />
+        <UserPreview user={userConfidentials.user}>
+          {(status === "OPENED" || status === "REJECTED") && (
+            <View style={styles.buttonRow}>
+              <Button onPress={pay} mode="contained">
+                {dictionary.pay}
+              </Button>
+            </View>
+          )}
+        </UserPreview>
       </BottomAction>
     </React.Fragment>
   );
@@ -134,5 +170,9 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });

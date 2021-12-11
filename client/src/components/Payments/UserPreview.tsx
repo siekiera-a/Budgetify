@@ -26,6 +26,7 @@ export function UserPreview({ user, children }: Props) {
     <Stack space={16}>
       <View style={styles.center}>
         <Avatar avatar={user.avatar} name={user.name} size={100} />
+        <Text style={styles.username}>{user.name}</Text>
       </View>
 
       {user.blikNumber || user.bankAccount ? (
@@ -78,5 +79,9 @@ const makeStyles = (placeholderColor: string) =>
     row: {
       flexDirection: "row",
       justifyContent: "space-between",
+    },
+    username: {
+      marginTop: 12,
+      fontSize: 25,
     },
   });
