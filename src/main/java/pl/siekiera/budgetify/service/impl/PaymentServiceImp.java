@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -97,7 +98,8 @@ public class PaymentServiceImp implements PaymentService {
             .collect(Collectors.toUnmodifiableList());
     }
 
-    private PaymentHistoryEntity getPaymentStatus(PaymentEntity payment) {
+    @Override
+    public PaymentHistoryEntity getPaymentStatus(PaymentEntity payment) {
         return payment.getPaymentHistory().stream()
             .max(Comparator.comparing(PaymentHistoryEntity::getTime))
             .orElseThrow(() -> new IllegalStateException(String.format("Payment with id =" +
@@ -183,4 +185,38 @@ public class PaymentServiceImp implements PaymentService {
             .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean pay(long paymentId, UserEntity user) {
+        var paymentWrapper = paymentRepository.findUserPaymentToPay(paymentId, user);
+
+        if (paymentWrapper.isEmpty()) {
+            return false;
+        }
+
+        var payment = paymentWrapper.get();
+        var paymentStatus = getPaymentStatus(payment).getStatus().getName();
+
+        if (PaymentStatusEnumEntity.PENDING.equals(paymentStatus)
+            || PaymentStatusEnumEntity.CLOSED.equals(paymentStatus)) {
+            return false;
+        }
+
+        var paymentHistory = createPaymentHistory(payment, PaymentStatusEnumEntity.PENDING);
+        payment.getPaymentHistory().add(paymentHistory);
+        paymentRepository.save(payment);
+        return true;
+    }
+
+    private PaymentHistoryEntity createPaymentHistory(PaymentEntity payment,
+                                                      PaymentStatusEnumEntity status) {
+        var entity = new PaymentHistoryEntity();
+        entity.setPayment(payment);
+        entity.setStatus(paymentStatuses.get(status));
+        return entity;
+    }
+
+    @Override
+    public Optional<PaymentEntity> getPayment(long id) {
+        return paymentRepository.findById(id);
+    }
 }
