@@ -11,5 +11,7 @@ export * from "./getInvoice";
 export * from "./getReceivables";
 export { getPaymentsForSettlement } from "./getPaymentsForSettlement";
 export * from "./payPayment";
+export { acceptPayment } from "./acceptPayment";
+export { rejectPayment } from "./rejectPayment";
 
 export * from "./types";
