@@ -76,4 +76,6 @@ export type StringId =
   | "bankAccountNumber"
   | "phoneNumber"
   | "noConfidentialsProvided"
-  | "pay";
+  | "pay"
+  | "billingData"
+  | "absence";

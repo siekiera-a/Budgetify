@@ -29,8 +29,8 @@ export type User = {
 export type Profile = User & {
   email: string;
   registrationTime: string;
-  blikNumber: string;
-  bankAccount: string;
+  blikNumber: string | null;
+  bankAccount: string | null;
 };
 
 export type CreateGroupRequest = {

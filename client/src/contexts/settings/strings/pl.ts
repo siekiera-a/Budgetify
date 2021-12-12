@@ -61,6 +61,8 @@ const strings: Dictionary = {
   phoneNumber: "Numer telefonu",
   noConfidentialsProvided: "Nie podano danych do rozliczenia",
   pay: "Zapłać",
+  billingData: "Dane do rozliczenia",
+  absence: "Brak",
 };
 
 export default strings;

@@ -3,6 +3,8 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Caption, List, Surface, Title } from "react-native-paper";
 import { useHttp, useSettings, useStorage } from "../../contexts";
 import { EditImage, SafeAreaView } from "../../ui";
+import { BankAccountField } from "./BankAccountField";
+import { PhoneField } from "./PhoneField";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function Settings() {
@@ -33,7 +35,19 @@ export function Settings() {
           </Surface>
         )}
         <ScrollView style={styles.settingContainer}>
-          <List.Item title={dictionary.darkTheme} right={ThemeSwitcher} />
+          <List.Section
+            title={dictionary.billingData}
+            titleStyle={styles.listSubheader}
+          >
+            <PhoneField phone={profile?.blikNumber || ""} />
+            <BankAccountField bankAccount={profile?.bankAccount || ""} />
+          </List.Section>
+          <List.Section
+            title={dictionary.settings}
+            titleStyle={styles.listSubheader}
+          >
+            <List.Item title={dictionary.darkTheme} right={ThemeSwitcher} />
+          </List.Section>
         </ScrollView>
       </View>
       <Button mode="contained" style={styles.logoutButton} onPress={logout}>
@@ -71,5 +85,8 @@ const styles = StyleSheet.create({
   logoutButton: {
     alignSelf: "flex-end",
     width: "100%",
+  },
+  listSubheader: {
+    paddingVertical: 0,
   },
 });

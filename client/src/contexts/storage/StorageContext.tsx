@@ -4,7 +4,7 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { setItemAsync, getItemAsync, deleteItemAsync } from "expo-secure-store";
+import { setItemAsync, deleteItemAsync } from "expo-secure-store";
 import { Profile } from "../../libs";
 
 export interface StorageContext {
