@@ -41,4 +41,6 @@ public interface PaymentService {
 
     boolean accept(long paymentId, UserEntity user);
 
+    boolean reject(long paymentId, UserEntity user);
+
 }

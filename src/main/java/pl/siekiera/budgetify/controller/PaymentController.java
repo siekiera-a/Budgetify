@@ -57,4 +57,12 @@ public class PaymentController {
         return ResponseEntity.ok(new SuccessResponse(invoiceService.settleThePayment(paymentId,
             me)));
     }
+
+    @PostMapping("/reject/{id}")
+    public ResponseEntity<SuccessResponse> reject(@PathVariable(name = "id") long paymentId,
+                                               Authentication authentication) {
+        var me = (UserEntity) authentication.getPrincipal();
+        return ResponseEntity.ok(new SuccessResponse(paymentService.reject(paymentId, me)));
+    }
+
 }

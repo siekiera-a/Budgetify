@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -187,29 +188,32 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public boolean pay(long paymentId, UserEntity user) {
-        var paymentWrapper = paymentRepository.findUserPaymentToPay(paymentId, user);
-
-        if (paymentWrapper.isEmpty()) {
-            return false;
-        }
-
-        var payment = paymentWrapper.get();
-        var paymentStatus = getPaymentStatus(payment).getStatus().getName();
-
-        if (PaymentStatusEnumEntity.PENDING.equals(paymentStatus)
-            || PaymentStatusEnumEntity.CLOSED.equals(paymentStatus)) {
-            return false;
-        }
-
-        var paymentHistory = createPaymentHistory(payment, PaymentStatusEnumEntity.PENDING);
-        payment.getPaymentHistory().add(paymentHistory);
-        paymentRepository.save(payment);
-        return true;
+        Predicate<PaymentStatusEnumEntity> invalidStatePredicate =
+            (status) -> PaymentStatusEnumEntity.PENDING.equals(status)
+                || PaymentStatusEnumEntity.CLOSED.equals(status);
+        return settle(paymentId, user, invalidStatePredicate, PaymentStatusEnumEntity.PENDING);
     }
 
     @Override
     public boolean accept(long paymentId, UserEntity user) {
-        var paymentWrapper = paymentRepository.findPaymentToSettle(paymentId, user);
+        Predicate<PaymentStatusEnumEntity> invalidStatePredicate =
+            (status) -> !PaymentStatusEnumEntity.PENDING.equals(status);
+        return settle(paymentId, user, invalidStatePredicate, PaymentStatusEnumEntity.CLOSED);
+    }
+
+    @Override
+    public boolean reject(long paymentId, UserEntity user) {
+        Predicate<PaymentStatusEnumEntity> invalidStatePredicate =
+            (status) -> !PaymentStatusEnumEntity.PENDING.equals(status);
+        return settle(paymentId, user, invalidStatePredicate, PaymentStatusEnumEntity.REJECTED);
+    }
+
+    private boolean settle(long paymentId, UserEntity user,
+                           Predicate<PaymentStatusEnumEntity> invalidPaymentStatus,
+                           PaymentStatusEnumEntity resultStatus) {
+        var paymentWrapper = resultStatus == PaymentStatusEnumEntity.PENDING ?
+            paymentRepository.findUserPaymentToPay(paymentId, user) :
+            paymentRepository.findPaymentToSettle(paymentId, user);
 
         if (paymentWrapper.isEmpty()) {
             return false;
@@ -218,11 +222,11 @@ public class PaymentServiceImp implements PaymentService {
         var payment = paymentWrapper.get();
         var paymentStatus = getPaymentStatus(payment).getStatus().getName();
 
-        if (!PaymentStatusEnumEntity.PENDING.equals(paymentStatus)) {
+        if (invalidPaymentStatus.test(paymentStatus)) {
             return false;
         }
 
-        var paymentHistory = createPaymentHistory(payment, PaymentStatusEnumEntity.CLOSED);
+        var paymentHistory = createPaymentHistory(payment, resultStatus);
         payment.getPaymentHistory().add(paymentHistory);
         paymentRepository.save(payment);
         return true;
