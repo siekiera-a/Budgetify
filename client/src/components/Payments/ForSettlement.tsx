@@ -1,7 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import { ShelfParams } from ".";
 import { useHttp, useSettings } from "../../contexts";
 import {
@@ -98,13 +98,17 @@ export function ForSettlement() {
     <React.Fragment>
       <ScrollView style={styles.container}>
         <Stack space={8}>
-          {payments.map((payment) => (
-            <PaymentItem
-              key={payment.id}
-              onShowPress={showProfile}
-              {...payment}
-            />
-          ))}
+          {payments.length > 0 ? (
+            payments.map((payment) => (
+              <PaymentItem
+                key={payment.id}
+                onShowPress={showProfile}
+                {...payment}
+              />
+            ))
+          ) : (
+            <Text style={styles.textCenter}>{dictionary.noResults}</Text>
+          )}
         </Stack>
       </ScrollView>
       <BottomAction visible={userConfidentials.visible} onDismiss={closeAction}>
@@ -137,5 +141,8 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     justifyContent: "space-around",
+  },
+  textCenter: {
+    textAlign: "center",
   },
 });

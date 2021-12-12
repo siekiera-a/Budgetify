@@ -121,13 +121,17 @@ export function Receivables() {
           />
         </View>
         <Stack space={8}>
-          {payments.map((payment) => (
-            <PaymentItem
-              key={payment.id}
-              onShowPress={showProfile}
-              {...payment}
-            />
-          ))}
+          {payments.length > 0 ? (
+            payments.map((payment) => (
+              <PaymentItem
+                key={payment.id}
+                onShowPress={showProfile}
+                {...payment}
+              />
+            ))
+          ) : (
+            <Text style={styles.textCenter}>{dictionary.noResults}</Text>
+          )}
         </Stack>
       </ScrollView>
       <BottomAction visible={userConfidentials.visible} onDismiss={closeAction}>
@@ -174,5 +178,8 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     justifyContent: "center",
+  },
+  textCenter: {
+    textAlign: "center",
   },
 });
