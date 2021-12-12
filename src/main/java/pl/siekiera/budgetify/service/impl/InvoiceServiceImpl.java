@@ -10,6 +10,7 @@ import pl.siekiera.budgetify.entity.GroupEntity;
 import pl.siekiera.budgetify.entity.InvoiceEntity;
 import pl.siekiera.budgetify.entity.InvoiceItemEntity;
 import pl.siekiera.budgetify.entity.PaymentEntity;
+import pl.siekiera.budgetify.entity.PaymentStatusEnumEntity;
 import pl.siekiera.budgetify.entity.PhotoEntity;
 import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.exception.GroupNotFoundException;
@@ -131,5 +132,32 @@ public class InvoiceServiceImpl implements InvoiceService {
             .map(invoice ->
                 new InvoiceResponse(invoice, getTotalPrice(invoice))
             );
+    }
+
+    @Override
+    public boolean settleThePayment(long paymentId, UserEntity user) {
+        var success = paymentService.accept(paymentId, user);
+
+        if (!success) {
+            return false;
+        }
+
+        var payment = paymentService.getPayment(paymentId);
+
+        if (payment.isEmpty()) {
+            return false;
+        }
+
+        var invoice =  invoiceRepository.getSettledInvoice(payment.get());
+        var allPaymentsClosed = invoice.getPayments().stream()
+            .map(p -> paymentService.getPaymentStatus(p).getStatus().getName())
+            .allMatch(PaymentStatusEnumEntity.CLOSED::equals);
+
+        if (allPaymentsClosed) {
+            invoice.setSettled(true);
+            invoiceRepository.save(invoice);
+        }
+
+        return true;
     }
 }

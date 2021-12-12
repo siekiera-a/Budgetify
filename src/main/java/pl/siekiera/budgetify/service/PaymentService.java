@@ -39,4 +39,6 @@ public interface PaymentService {
 
     PaymentHistoryEntity getPaymentStatus(PaymentEntity payment);
 
+    boolean accept(long paymentId, UserEntity user);
+
 }

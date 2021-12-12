@@ -16,6 +16,7 @@ import pl.siekiera.budgetify.dto.outgoing.PaymentResponse;
 import pl.siekiera.budgetify.dto.outgoing.SuccessResponse;
 import pl.siekiera.budgetify.entity.PaymentStatusEnumEntity;
 import pl.siekiera.budgetify.entity.UserEntity;
+import pl.siekiera.budgetify.service.InvoiceService;
 import pl.siekiera.budgetify.service.PaymentService;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 public class PaymentController {
 
     PaymentService paymentService;
+    InvoiceService invoiceService;
 
     @GetMapping
     public ResponseEntity<List<PaymentResponse>> getReceivables(@RequestParam("status") PaymentStatusEnumEntity status, Authentication authentication) {
@@ -48,4 +50,11 @@ public class PaymentController {
         return ResponseEntity.ok(new SuccessResponse(paymentService.pay(paymentId, me)));
     }
 
+    @PostMapping("/accept/{id}")
+    public ResponseEntity<SuccessResponse> accept(@PathVariable(name = "id") long paymentId,
+                                                  Authentication authentication) {
+        var me = (UserEntity) authentication.getPrincipal();
+        return ResponseEntity.ok(new SuccessResponse(invoiceService.settleThePayment(paymentId,
+            me)));
+    }
 }

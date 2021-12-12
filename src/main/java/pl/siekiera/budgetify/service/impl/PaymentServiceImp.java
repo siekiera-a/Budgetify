@@ -207,6 +207,27 @@ public class PaymentServiceImp implements PaymentService {
         return true;
     }
 
+    @Override
+    public boolean accept(long paymentId, UserEntity user) {
+        var paymentWrapper = paymentRepository.findPaymentToSettle(paymentId, user);
+
+        if (paymentWrapper.isEmpty()) {
+            return false;
+        }
+
+        var payment = paymentWrapper.get();
+        var paymentStatus = getPaymentStatus(payment).getStatus().getName();
+
+        if (!PaymentStatusEnumEntity.PENDING.equals(paymentStatus)) {
+            return false;
+        }
+
+        var paymentHistory = createPaymentHistory(payment, PaymentStatusEnumEntity.CLOSED);
+        payment.getPaymentHistory().add(paymentHistory);
+        paymentRepository.save(payment);
+        return true;
+    }
+
     private PaymentHistoryEntity createPaymentHistory(PaymentEntity payment,
                                                       PaymentStatusEnumEntity status) {
         var entity = new PaymentHistoryEntity();

@@ -22,4 +22,6 @@ public interface InvoiceService {
 
     double getTotalPrice(InvoiceEntity invoice);
 
+    boolean settleThePayment(long paymentId, UserEntity user);
+
 }
