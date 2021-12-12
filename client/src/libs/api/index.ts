@@ -13,5 +13,7 @@ export { getPaymentsForSettlement } from "./getPaymentsForSettlement";
 export * from "./payPayment";
 export { acceptPayment } from "./acceptPayment";
 export { rejectPayment } from "./rejectPayment";
+export { updateBankAccount } from "./updateBankAccount";
+export { updatePhoneNumber } from "./updatePhoneNumber";
 
 export * from "./types";
