@@ -1,10 +1,10 @@
 import React, { useCallback, useRef } from "react";
 import { TextInput } from "react-native-paper";
 import { Controller, useForm } from "react-hook-form";
-import { useSettings } from "../../contexts";
+import { useHttp, useSettings, useStorage } from "../../contexts";
 import { CloseEditingCallback, EditableField } from "./EditableField";
 import { StyleSheet } from "react-native";
-import { formatPhoneNumber } from "../../libs";
+import { formatPhoneNumber, updatePhoneNumber } from "../../libs";
 
 type Phone = {
   phone: string;
@@ -18,6 +18,8 @@ const phoneRegex = /^\d{9}$/;
 
 export function PhoneField({ phone }: Props) {
   const { dictionary } = useSettings();
+  const { client } = useHttp();
+  const { saveProfile } = useStorage();
   const closeEditingRef = useRef<CloseEditingCallback>();
 
   const { handleSubmit, control, reset } = useForm<Phone>({
@@ -34,11 +36,20 @@ export function PhoneField({ phone }: Props) {
 
   const onSave = useCallback(
     handleSubmit((data) => {
-      console.log(data);
-      if (closeEditingRef.current) {
-        closeEditingRef.current();
-      }
-    }), [closeEditingRef, handleSubmit]);
+      const asyncFunc = async () => {
+        const profile = await updatePhoneNumber(client, data.phone);
+
+        saveProfile(profile);
+
+        if (closeEditingRef.current) {
+          closeEditingRef.current();
+        }
+      };
+
+      asyncFunc();
+    }),
+    [closeEditingRef, handleSubmit, client, saveProfile]
+  );
 
   return (
     <EditableField

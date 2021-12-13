@@ -1,10 +1,10 @@
 import React, { useCallback, useRef } from "react";
-import { TextInput } from "react-native-paper";
 import { Controller, useForm } from "react-hook-form";
-import { useSettings } from "../../contexts";
-import { CloseEditingCallback, EditableField } from "./EditableField";
 import { StyleSheet } from "react-native";
-import { formatBankAccount } from "../../libs";
+import { TextInput } from "react-native-paper";
+import { useHttp, useSettings, useStorage } from "../../contexts";
+import { formatBankAccount, updateBankAccount } from "../../libs";
+import { CloseEditingCallback, EditableField } from "./EditableField";
 
 type BankAccount = {
   bankAccount: string;
@@ -18,6 +18,8 @@ const bankAccountRegex = /^\d{26}$/;
 
 export function BankAccountField({ bankAccount }: Props) {
   const { dictionary } = useSettings();
+  const { client } = useHttp();
+  const { saveProfile } = useStorage();
   const closeEditingRef = useRef<CloseEditingCallback>();
 
   const { handleSubmit, control, reset } = useForm<BankAccount>({
@@ -34,11 +36,20 @@ export function BankAccountField({ bankAccount }: Props) {
 
   const onSave = useCallback(
     handleSubmit((data) => {
-      console.log(data);
-      if (closeEditingRef.current) {
-        closeEditingRef.current();
-      }
-    }), [closeEditingRef, handleSubmit]);
+      const asyncFunc = async () => {
+        const profile = await updateBankAccount(client, data.bankAccount);
+
+        saveProfile(profile);
+
+        if (closeEditingRef.current) {
+          closeEditingRef.current();
+        }
+      };
+
+      asyncFunc();
+    }),
+    [closeEditingRef, handleSubmit, client, saveProfile]
+  );
 
   return (
     <EditableField
