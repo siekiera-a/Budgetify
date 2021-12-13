@@ -1,23 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { Text } from "react-native-paper";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useSettings } from "../../contexts";
-import { View } from "../../ui/View";
+import { AnalasisView } from "../Analasis";
 import { GroupsTab } from "../Groups/GroupsTab";
 import { Payments } from "../Payments";
 import { Settings } from "../Settings";
 import { TabNavigationParamList } from "./types";
 
 const Tab = createBottomTabNavigator<TabNavigationParamList>();
-
-const Component = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Tab</Text>
-    </View>
-  );
-};
 
 export function BottomTabs() {
   const { dictionary } = useSettings();
@@ -29,7 +20,7 @@ export function BottomTabs() {
     >
       <Tab.Screen
         name="Analysis"
-        component={Component}
+        component={AnalasisView}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="pie-chart" color={color} size={size} />
