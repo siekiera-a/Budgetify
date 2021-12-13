@@ -15,5 +15,6 @@ export { acceptPayment } from "./acceptPayment";
 export { rejectPayment } from "./rejectPayment";
 export { updateBankAccount } from "./updateBankAccount";
 export { updatePhoneNumber } from "./updatePhoneNumber";
+export * from "./getPaymentsToReturn";
 
 export * from "./types";
