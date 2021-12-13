@@ -33,15 +33,15 @@ export function StorageContextProvider({ children }: StorageContextProps) {
 
   const saveProfile = useCallback(
     async (profile: Profile) => {
-      setProfile(profile);
       await setItemAsync(PROFILE_PERSISTANCE_KEY, JSON.stringify(profile));
+      setProfile(profile);
     },
     [setProfile]
   );
 
   const clearProfile = useCallback(async () => {
-    setProfile(undefined);
     await deleteItemAsync(PROFILE_PERSISTANCE_KEY);
+    setProfile(undefined);
   }, [setProfile]);
 
   return (
