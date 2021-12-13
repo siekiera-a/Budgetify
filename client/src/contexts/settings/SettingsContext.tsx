@@ -7,7 +7,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { Appearance } from "react-native";
+import { Appearance, StatusBar } from "react-native";
 import { darkTheme } from "./themes/darkTheme";
 import { lightTheme } from "./themes/lightTheme";
 import pl from "./strings/pl";
@@ -59,15 +59,12 @@ export function SettingsProvider({ children }: SettingsContextProps) {
   const [language, setLanguage] = useState(defaultLanguage);
   const [initialized, setInitialized] = useState(false);
 
-  const {
-    getItem: getTheme,
-    setItem: persistTheme,
-  } = useAsyncStorage(THEME_PERSISTENT_KEY);
+  const { getItem: getTheme, setItem: persistTheme } =
+    useAsyncStorage(THEME_PERSISTENT_KEY);
 
-  const {
-    getItem: getLanguage,
-    setItem: persistLanguage,
-  } = useAsyncStorage(LANGUAGE_PERSISTENT_KEY);
+  const { getItem: getLanguage, setItem: persistLanguage } = useAsyncStorage(
+    LANGUAGE_PERSISTENT_KEY
+  );
 
   useEffect(() => {
     const initialize = async () => {
@@ -90,6 +87,7 @@ export function SettingsProvider({ children }: SettingsContextProps) {
   }, []);
 
   useEffect(() => {
+    StatusBar.setBarStyle(theme === "dark" ? "light-content" : "dark-content");
     if (initialized) {
       persistTheme(theme);
     }
