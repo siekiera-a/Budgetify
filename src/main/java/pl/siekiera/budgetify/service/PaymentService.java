@@ -2,6 +2,7 @@ package pl.siekiera.budgetify.service;
 
 import pl.siekiera.budgetify.dto.incoming.InvoiceItemRequest;
 import pl.siekiera.budgetify.dto.outgoing.PaymentResponse;
+import pl.siekiera.budgetify.dto.outgoing.UserPaymentResponse;
 import pl.siekiera.budgetify.entity.InvoiceEntity;
 import pl.siekiera.budgetify.entity.PaymentEntity;
 import pl.siekiera.budgetify.entity.PaymentHistoryEntity;
@@ -42,5 +43,7 @@ public interface PaymentService {
     boolean accept(long paymentId, UserEntity user);
 
     boolean reject(long paymentId, UserEntity user);
+
+    List<UserPaymentResponse> getPaymentsToReturn(UserEntity user);
 
 }

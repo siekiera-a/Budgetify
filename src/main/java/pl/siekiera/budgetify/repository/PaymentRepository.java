@@ -39,4 +39,9 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
     Optional<PaymentEntity> findPaymentToSettle(@Param("id") long paymentId,
                                                 @Param("user") UserEntity user);
 
+    @Query("select p from PaymentEntity p join fetch p.user join fetch p.paymentHistory ph join " +
+        "fetch ph.status join InvoiceEntity i on p.invoice = i where i.user = :user and i.settled" +
+        " = false and p.user <> :user")
+    Set<PaymentEntity> findPaymentsToReturn(@Param("user") UserEntity user);
+
 }

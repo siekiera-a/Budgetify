@@ -3,6 +3,7 @@ package pl.siekiera.budgetify.service.impl;
 import org.springframework.stereotype.Service;
 import pl.siekiera.budgetify.dto.incoming.InvoiceItemRequest;
 import pl.siekiera.budgetify.dto.outgoing.PaymentResponse;
+import pl.siekiera.budgetify.dto.outgoing.UserPaymentResponse;
 import pl.siekiera.budgetify.entity.InvoiceEntity;
 import pl.siekiera.budgetify.entity.PaymentEntity;
 import pl.siekiera.budgetify.entity.PaymentHistoryEntity;
@@ -15,6 +16,7 @@ import pl.siekiera.budgetify.model.InvoiceToPay;
 import pl.siekiera.budgetify.model.InvoiceToSettlement;
 import pl.siekiera.budgetify.model.Payment;
 import pl.siekiera.budgetify.model.PaymentWithStatus;
+import pl.siekiera.budgetify.model.User;
 import pl.siekiera.budgetify.repository.PaymentRepository;
 import pl.siekiera.budgetify.repository.PaymentStatusRepository;
 import pl.siekiera.budgetify.repository.UserRepository;
@@ -244,4 +246,35 @@ public class PaymentServiceImp implements PaymentService {
     public Optional<PaymentEntity> getPayment(long id) {
         return paymentRepository.findById(id);
     }
+
+    @Override
+    public List<UserPaymentResponse> getPaymentsToReturn(UserEntity user) {
+        var payments = paymentRepository.findPaymentsToReturn(user);
+        var userPaymentMap = payments.stream()
+            .filter(payment -> {
+                var status = getPaymentStatus(payment).getStatus().getName();
+                return PaymentStatusEnumEntity.OPENED.equals(status) || PaymentStatusEnumEntity.REJECTED.equals(status);
+            })
+            .map(payment ->
+                new UserPaymentResponse(new User(payment.getUser()), payment.getPrice()))
+            .reduce(new HashMap<User, Double>(), (acc, element) -> {
+                var assignee = element.getUser();
+                var totalPrice = acc.getOrDefault(assignee, 0.0);
+                acc.put(assignee, totalPrice + element.getPrice());
+                return acc;
+            }, (e1, e2) -> {
+                var map = new HashMap<>(e1);
+                e2.forEach((key, value) -> {
+                    var savedValue = map.getOrDefault(key, 0.0);
+                    map.put(key, Math.max(savedValue, value));
+                });
+                return map;
+            });
+
+        return userPaymentMap.entrySet().stream()
+            .map(entry -> new UserPaymentResponse(entry.getKey(), entry.getValue()))
+            .sorted(Comparator.comparingDouble(UserPaymentResponse::getPrice).reversed())
+            .collect(Collectors.toList());
+    }
+
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.siekiera.budgetify.dto.outgoing.PaymentResponse;
 import pl.siekiera.budgetify.dto.outgoing.SuccessResponse;
+import pl.siekiera.budgetify.dto.outgoing.UserPaymentResponse;
 import pl.siekiera.budgetify.entity.PaymentStatusEnumEntity;
 import pl.siekiera.budgetify.entity.UserEntity;
 import pl.siekiera.budgetify.service.InvoiceService;
@@ -60,9 +61,15 @@ public class PaymentController {
 
     @PostMapping("/reject/{id}")
     public ResponseEntity<SuccessResponse> reject(@PathVariable(name = "id") long paymentId,
-                                               Authentication authentication) {
+                                                  Authentication authentication) {
         var me = (UserEntity) authentication.getPrincipal();
         return ResponseEntity.ok(new SuccessResponse(paymentService.reject(paymentId, me)));
+    }
+
+    @GetMapping("/toReturn")
+    public ResponseEntity<List<UserPaymentResponse>> getPaymentsToReturn(Authentication authentication) {
+        var me = (UserEntity) authentication.getPrincipal();
+        return ResponseEntity.ok(paymentService.getPaymentsToReturn(me));
     }
 
 }
