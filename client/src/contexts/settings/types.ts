@@ -1,5 +1,5 @@
-import { Theme as NavigationTheme } from "@react-navigation/native";
-import { PaymentStatus } from "../../libs";
+import {Theme as NavigationTheme} from "@react-navigation/native";
+import {PaymentStatus} from "../../libs";
 
 export type Language = "PL";
 
@@ -78,4 +78,8 @@ export type StringId =
   | "noConfidentialsProvided"
   | "pay"
   | "billingData"
-  | "absence";
+  | "absence"
+  | "expenses"
+  | "settled"
+  | "notPaid"
+  | "noData";

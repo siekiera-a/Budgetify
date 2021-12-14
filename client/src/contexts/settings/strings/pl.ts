@@ -1,4 +1,4 @@
-import { Dictionary } from "../types";
+import {Dictionary} from "../types";
 
 const strings: Dictionary = {
   emailLabel: "Adres email",
@@ -63,6 +63,10 @@ const strings: Dictionary = {
   pay: "Zapłać",
   billingData: "Dane do rozliczenia",
   absence: "Brak",
+  expenses: "Wydatki",
+  notPaid: "Nieopłacone",
+  settled: "Rozliczone",
+  noData: "Brak danych",
 };
 
 export default strings;
