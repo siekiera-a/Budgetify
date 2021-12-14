@@ -16,12 +16,15 @@ import pl.siekiera.budgetify.model.InvoiceToPay;
 import pl.siekiera.budgetify.model.InvoiceToSettlement;
 import pl.siekiera.budgetify.model.Payment;
 import pl.siekiera.budgetify.model.PaymentWithStatus;
+import pl.siekiera.budgetify.model.TimeRangeSummary;
 import pl.siekiera.budgetify.model.User;
 import pl.siekiera.budgetify.repository.PaymentRepository;
 import pl.siekiera.budgetify.repository.PaymentStatusRepository;
 import pl.siekiera.budgetify.repository.UserRepository;
 import pl.siekiera.budgetify.service.PaymentService;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -277,4 +280,54 @@ public class PaymentServiceImp implements PaymentService {
             .collect(Collectors.toList());
     }
 
+    @Override
+    public TimeRangeSummary getTimeRangeSummary(LocalDateTime from, LocalDateTime to,
+                                                UserEntity user) {
+        var assignedPayments = paymentRepository.findAssignedPaymentsFromTimeRange(user, from, to);
+        var createdPayments = paymentRepository.findCreatedPaymentsFromTimeRange(user, from, to);
+
+
+        var paid = assignedPayments.stream()
+            .filter(payment -> {
+                var status = getPaymentStatus(payment).getStatus().getName();
+                return PaymentStatusEnumEntity.CLOSED.equals(status) || PaymentStatusEnumEntity.PENDING.equals(status);
+            }).mapToDouble(PaymentEntity::getPrice)
+            .sum();
+
+        var summary = createdPayments.stream()
+            .map(payment -> {
+                var status = getPaymentStatus(payment).getStatus().getName();
+                return new PaymentWithStatus(payment.getId(), payment.getPrice(), status, null);
+            })
+            .reduce(
+                List.of(0.0, 0.0, 0.0), // indexes: 0 - settled; 1 - inSettlement; 2 - not paid
+                (acc, payment) -> {
+                    var settled = acc.get(0);
+                    var inSettlement = acc.get(1);
+                    var notPaid = acc.get(2);
+                    var value = payment.getPrice();
+
+                    switch (payment.getStatus()) {
+                        case CLOSED:
+                            return List.of(settled + value, inSettlement, notPaid);
+                        case PENDING:
+                            return List.of(settled, inSettlement + value, notPaid);
+                        case OPENED:
+                        case REJECTED:
+                            return List.of(settled, inSettlement, notPaid + value);
+                    }
+                    return acc;
+                }, (e1, e2) -> {
+                    ArrayList<Double> list = new ArrayList<>(e1);
+                    list.addAll(e2);
+                    return list;
+                });
+
+        var total = paid + summary.stream().mapToDouble(Double::valueOf).sum();
+        var settled = summary.get(0);
+        var inSettlement = summary.get(1);
+        var notPaid = summary.get(2);
+
+        return new TimeRangeSummary(total, paid, settled, inSettlement, notPaid, from, to);
+    }
 }

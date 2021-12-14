@@ -12,8 +12,10 @@ import pl.siekiera.budgetify.model.AbstractGroupInvoice;
 import pl.siekiera.budgetify.model.InvoicePaymentSettlement;
 import pl.siekiera.budgetify.model.Payment;
 import pl.siekiera.budgetify.model.PaymentWithStatus;
+import pl.siekiera.budgetify.model.TimeRangeSummary;
 import pl.siekiera.budgetify.service.impl.UserPaymentsSummary;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,5 +47,7 @@ public interface PaymentService {
     boolean reject(long paymentId, UserEntity user);
 
     List<UserPaymentResponse> getPaymentsToReturn(UserEntity user);
+
+    TimeRangeSummary getTimeRangeSummary(LocalDateTime from, LocalDateTime to, UserEntity user);
 
 }

@@ -17,9 +17,11 @@ import pl.siekiera.budgetify.dto.outgoing.SuccessResponse;
 import pl.siekiera.budgetify.dto.outgoing.UserPaymentResponse;
 import pl.siekiera.budgetify.entity.PaymentStatusEnumEntity;
 import pl.siekiera.budgetify.entity.UserEntity;
+import pl.siekiera.budgetify.model.TimeRangeSummary;
 import pl.siekiera.budgetify.service.InvoiceService;
 import pl.siekiera.budgetify.service.PaymentService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -70,6 +72,14 @@ public class PaymentController {
     public ResponseEntity<List<UserPaymentResponse>> getPaymentsToReturn(Authentication authentication) {
         var me = (UserEntity) authentication.getPrincipal();
         return ResponseEntity.ok(paymentService.getPaymentsToReturn(me));
+    }
+
+    @GetMapping("/timeRangeSummary")
+    public ResponseEntity<TimeRangeSummary> getTimeRangeSummary(Authentication authentication) {
+        var me = (UserEntity) authentication.getPrincipal();
+        var from = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+        var to = from.plusMonths(1).minusDays(1);
+        return ResponseEntity.ok(paymentService.getTimeRangeSummary(from, to, me));
     }
 
 }

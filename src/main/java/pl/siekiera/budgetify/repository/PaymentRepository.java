@@ -8,6 +8,7 @@ import pl.siekiera.budgetify.entity.InvoiceEntity;
 import pl.siekiera.budgetify.entity.PaymentEntity;
 import pl.siekiera.budgetify.entity.UserEntity;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,5 +44,16 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
         "fetch ph.status join InvoiceEntity i on p.invoice = i where i.user = :user and i.settled" +
         " = false and p.user <> :user")
     Set<PaymentEntity> findPaymentsToReturn(@Param("user") UserEntity user);
+
+    @Query("select p from PaymentEntity p join fetch p.paymentHistory ph join fetch ph.status " +
+        "join InvoiceEntity i on p.invoice = i where i.user = :user and i.addTime between :from " +
+        "and :to and p.user <> :user")
+    Set<PaymentEntity> findCreatedPaymentsFromTimeRange(@Param("user") UserEntity user, @Param(
+        "from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+    @Query("select p from PaymentEntity p join fetch p.paymentHistory ph join fetch ph.status " +
+        "where p.user = :user and ph.time between :from and :to")
+    Set<PaymentEntity> findAssignedPaymentsFromTimeRange(@Param("user") UserEntity user, @Param(
+        "from") LocalDateTime from, @Param("to") LocalDateTime to);
 
 }

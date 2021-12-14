@@ -33,7 +33,7 @@ public class PaymentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     InvoiceEntity invoice;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     UserEntity user;
 
     double price;
