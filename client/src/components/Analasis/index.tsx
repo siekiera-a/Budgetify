@@ -1,8 +1,8 @@
-import {useFocusEffect} from "@react-navigation/native";
-import React, {useCallback, useState} from "react";
-import {ScrollView, StyleSheet, View} from "react-native";
-import {Surface, Text} from "react-native-paper";
-import {useHttp, useSettings} from "../../contexts";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Surface, Text } from "react-native-paper";
+import { useHttp, useSettings } from "../../contexts";
 import {
   formatPrice,
   getPaymentsToReturn,
@@ -10,8 +10,8 @@ import {
   TimeRangeSummary,
   UserPayment,
 } from "../../libs";
-import {Avatar, SafeAreaView, Stack} from "../../ui";
-import {Chart} from "./Chart";
+import { Avatar, SafeAreaView, Stack } from "../../ui";
+import { Chart } from "./Chart";
 
 export function AnalasisView() {
   const [userPayments, setUserPayments] = useState([] as UserPayment[]);
@@ -56,12 +56,37 @@ export function AnalasisView() {
   return (
     <SafeAreaView style={styles.container}>
       {summary.total > 0 ? (
-        <Chart
-          notPaid={summary.notPaid}
-          expenses={summary.expenses}
-          settled={summary.settled}
-          waiting={summary.waiting}
-        />
+        <React.Fragment>
+          <Chart
+            notPaid={summary.notPaid}
+            expenses={summary.expenses}
+            settled={summary.settled}
+            waiting={summary.waiting}
+          />
+
+          <Surface
+            style={[styles.surface, styles.marginVertical, styles.padding]}
+          >
+            <Stack space={12}>
+              <View style={[styles.row, styles.rowSpace]}>
+                <Text style={styles.largeFont}>{dictionary.expenses}:</Text>
+                <Text style={styles.largeFont}>{formatPrice(summary.expenses)} zł</Text>
+              </View>
+              <View style={[styles.row, styles.rowSpace]}>
+                <Text style={styles.largeFont}>{dictionary.settled}:</Text>
+                <Text style={styles.largeFont}>{formatPrice(summary.settled)} zł</Text>
+              </View>
+              <View style={[styles.row, styles.rowSpace]}>
+                <Text style={styles.largeFont}>{dictionary.PENDING}:</Text>
+                <Text style={styles.largeFont}>{formatPrice(summary.waiting)} zł</Text>
+              </View>
+              <View style={[styles.row, styles.rowSpace]}>
+                <Text style={styles.largeFont}>{dictionary.notPaid}:</Text>
+                <Text style={styles.largeFont}>{formatPrice(summary.notPaid)} zł</Text>
+              </View>
+            </Stack>
+          </Surface>
+        </React.Fragment>
       ) : (
         <Text style={[styles.centerText, styles.padding]}>
           {dictionary.noData}
@@ -120,4 +145,10 @@ const styles = StyleSheet.create({
   name: {
     marginLeft: 16,
   },
+  marginVertical: {
+    marginVertical: 8,
+  },
+  largeFont: {
+    fontSize: 16,
+  }
 });
