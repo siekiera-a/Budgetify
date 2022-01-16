@@ -1,14 +1,18 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import { StatusCodes } from "http-status-codes";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useHttp, useSettings, useStorage } from "../../contexts";
 import { ErrorResponse, signIn } from "../../libs";
 import { ErrorMessage, SafeAreaView, Stack } from "../../ui";
+import { StackAuthenticationNavigationParamList } from "../navigation/types";
 import { Credentials } from "./types";
 
-export function LoginView() {
+type Props = StackScreenProps<StackAuthenticationNavigationParamList, "SignIn">;
+
+export function LoginView({ navigation }: Props) {
   const { dictionary } = useSettings();
   const { client, setToken } = useHttp();
   const { saveProfile } = useStorage();
@@ -49,6 +53,10 @@ export function LoginView() {
     setMessage(undefined);
     handleRequest(data);
   };
+
+  const onSignUpPress = useCallback(() => {
+    navigation.replace("SignUp");
+  }, [navigation]);
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
@@ -117,6 +125,9 @@ export function LoginView() {
           disabled={loading}
         >
           {dictionary.signIn}
+        </Button>
+        <Button mode="outlined" onPress={onSignUpPress}>
+          {dictionary.signUp}
         </Button>
         {message && <ErrorMessage message={message} />}
       </Stack>

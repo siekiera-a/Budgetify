@@ -1,12 +1,16 @@
-import React from "react";
+import { StackScreenProps } from "@react-navigation/stack";
+import React, { useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button, TextInput } from "react-native-paper";
 import { useSettings } from "../../contexts";
 import { ErrorMessage, SafeAreaView, Stack } from "../../ui";
+import { StackAuthenticationNavigationParamList } from "../navigation/types";
 import { emailRegex, nameRegex, passwordRegex } from "./regexps";
 import { RegistrationForm } from "./types";
 
-export function RegisterView() {
+type Props = StackScreenProps<StackAuthenticationNavigationParamList, "SignIn">;
+
+export function RegisterView({ navigation }: Props) {
   const {
     control,
     formState: { errors },
@@ -32,6 +36,10 @@ export function RegisterView() {
 
     return dictionary.passwordsNotEquals;
   };
+
+  const onSignInPress = useCallback(() => {
+    navigation.replace("SignIn");
+  }, [navigation]);
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
@@ -154,6 +162,9 @@ export function RegisterView() {
         </Stack>
         <Button mode="contained" onPress={handleSubmit(onSubmit)}>
           {dictionary.signUp}
+        </Button>
+        <Button mode="outlined" onPress={onSignInPress}>
+          {dictionary.signIn}
         </Button>
       </Stack>
     </SafeAreaView>
