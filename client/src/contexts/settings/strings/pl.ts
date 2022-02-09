@@ -1,4 +1,4 @@
-import {Dictionary} from "../types";
+import { Dictionary } from "../types";
 
 const strings: Dictionary = {
   emailLabel: "Adres email",
@@ -67,6 +67,7 @@ const strings: Dictionary = {
   notPaid: "Nieopłacone",
   settled: "Rozliczone",
   noData: "Brak danych",
+  userAlreadyExists: "Użytkownik o podanym emailu już istnieje!",
 };
 
 export default strings;

@@ -1,8 +1,11 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { StatusCodes } from "http-status-codes";
+import { Keyboard } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { useSettings } from "../../contexts";
+import { useHttp, useSettings, useStorage } from "../../contexts";
+import { ErrorResponse, signUp } from "../../libs";
 import { ErrorMessage, SafeAreaView, Stack } from "../../ui";
 import { StackAuthenticationNavigationParamList } from "../navigation/types";
 import { emailRegex, nameRegex, passwordRegex } from "./regexps";
@@ -21,9 +24,34 @@ export function RegisterView({ navigation }: Props) {
     reValidateMode: "onBlur",
   });
   const { dictionary } = useSettings();
+  const { client, setToken } = useHttp();
+  const { saveProfile } = useStorage();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string>();
+
+  const handleRequest = async (data: RegistrationForm) => {
+    try {
+      const response = await signUp(client, data);
+      await setToken(response.token);
+      await saveProfile(response.profile);
+    } catch (e) {
+      const knownError =
+        e instanceof ErrorResponse &&
+        e.error.status &&
+        e.error.status === StatusCodes.CONFLICT;
+
+      setMessage(
+        knownError ? dictionary.userAlreadyExists : dictionary.unknownError
+      );
+      setLoading(false);
+    }
+  };
 
   const onSubmit = (data: RegistrationForm) => {
-    console.log(data);
+    Keyboard.dismiss();
+    setLoading(true);
+    setMessage(undefined);
+    handleRequest(data);
   };
 
   const passwordsAreEquals = (retypedPassword: string) => {
@@ -160,12 +188,18 @@ export function RegisterView({ navigation }: Props) {
             <ErrorMessage message={errors.retypedPassword.message} />
           )}
         </Stack>
-        <Button mode="contained" onPress={handleSubmit(onSubmit)}>
+        <Button
+          mode="contained"
+          onPress={handleSubmit(onSubmit)}
+          loading={loading}
+          disabled={loading}
+        >
           {dictionary.signUp}
         </Button>
         <Button mode="outlined" onPress={onSignInPress}>
           {dictionary.signIn}
         </Button>
+        {message && <ErrorMessage message={message} />}
       </Stack>
     </SafeAreaView>
   );

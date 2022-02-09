@@ -82,4 +82,5 @@ export type StringId =
   | "expenses"
   | "settled"
   | "notPaid"
-  | "noData";
+  | "noData"
+  | "userAlreadyExists";
