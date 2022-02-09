@@ -1,0 +1,6 @@
+FROM openjdk:latest
+
+WORKDIR /usr/src/server
+COPY target/*.jar .
+
+ENTRYPOINT ["java", "-jar", "./server.jar"]
